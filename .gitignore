@@ -1,0 +1,55 @@
+# ===== MATLAB / Simulink =====
+*.asv
+*.autosave
+slprj/
+*.slxc
+*.mexw32
+*.mexw64
+*.mexa64
+*.mexmaci64
+codegen/
+*_grt_rtw/
+*.slreqx
+
+# QuaRC build artifacts
+*.rtw
+*.dll
+*.obj
+*.map
+*.tmf
+
+# ===== Logged data files (raw, unrenamed) =====
+data.mat
+Heli3D.mat
+pitchdata.mat
+Vs.mat
+
+# Keep your renamed run files tracked (comment out if you'd rather exclude all .mat)
+# *.mat
+
+# ===== LaTeX report build files =====
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.nav
+*.snm
+*.vrb
+
+# ===== OS junk =====
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== Editor / IDE =====
+.vscode/
+*.swp
+
+# ===== Init files with calibration data (optional - see note below) =====
+# init_heli_1_2.m
+# init_heli_3_10.m
