@@ -1,0 +1,2 @@
+#include <winuser.rh>
+1 RT_MANIFEST "Lab3_IMU_Encoder_comp.auto.manifest"
