@@ -1,0 +1,2 @@
+#include <winuser.rh>
+1 RT_MANIFEST "Lab1_UD_Step04.auto.manifest"
