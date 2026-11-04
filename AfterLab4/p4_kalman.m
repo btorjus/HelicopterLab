@@ -1,6 +1,9 @@
 %% p4_kalman.m - Part IV: discrete-time Kalman filter
-% Run ONLY this script before Build. It runs p4_controller (-> heli_params,
-% init_heli_3_10, LQR with integral action), then sets up the Kalman filter.
+% Run ONLY this script before Build of heli_p4_kalman_kf_r2020b.slx.
+% It runs p4_controller (-> heli_params, init_heli_3_10, LQR with integral
+% action), then sets up the Kalman filter.
+% NB: the model has no encoder/estimate switch - the controller ALWAYS flies
+% on the Kalman estimates x_hat (same as Part III with the observer).
 %
 % Test plan (TEST):
 %   Prelab hypotheses
@@ -28,10 +31,9 @@
 p4_controller;        % clear; clc; heli_params; -> K, F, A_lqri, B_lqri, ...
 
 %% 1. Settings
-TEST    = 1;          % choose test 0-8 (see above)
-use_est = 0;          % 0 = controller on encoders (filter runs in parallel)
-                      % 1 = controller on Kalman estimates
-                      % Can be changed while running: set value + Ctrl+D
+TEST    = 7;          % choose test 0-8 (see above)
+noise_case = 'hover';    % TEST 0 only: 'ground' = motors off in software
+                          %              'hover'  = normal controller, hold still
 % IMU port: set in the IMU block URI in Simulink (currently serial://IMU:9),
 % check Device Manager every lab day.
 
@@ -111,18 +113,20 @@ switch TEST
 end
 
 %% 5. Printout
-fprintf('\nTEST %d: %s   (use_est = %d)\n', TEST, name, use_est);
+fprintf('\nTEST %d: %s   (controller on Kalman estimates)\n', TEST, name);
 fprintf('diag(Qd)     = [%s]\n', sprintf('%.1e ', diag(Qd)));
 fprintf('diag(Rd_use) = [%s]\n', sprintf('%.1e ', diag(Rd_use)));
-modus = {'par', 'cl'};
 if TEST == 0
-    fprintf('After the runs: save_run_p4(''T4_noise_ground'') and save_run_p4(''T4_noise_hover''), then run p4_noise\n');
+    fprintf('After the run: save_run_p4(''T4_noise_%s'')\n', noise_case);
+    fprintf('When both ground and hover are saved: run p4_noise\n');
 else
-    tag = sprintf('T4_test%d_%s', TEST, modus{use_est + 1});
+    tag = sprintf('T4_test%d_%s', TEST, name);
     fprintf('After the run: save_run_p4(''%s'')\n', tag);
 end
-if use_est && any(TEST == [2 3])
-    warning('Closed loop on a limit case (Qd=0 or Qd=inf) - spotter at the counterweight!');
+if any(TEST == [2 3])
+    warning(['Limit case (Qd=0 or Qd=inf) flown on the estimates - spotter at the ' ...
+             'counterweight! Take off on Baseline, switch Qd in hover (Ctrl+D), ' ...
+             'and switch back to Baseline if it goes wrong.']);
 end
 
 %% 6. Reference profile (copied from p3_observer.m, section 9)
@@ -131,7 +135,7 @@ dt  = 0.002;  t = (0:dt:45)';
 pc  = zeros(size(t));                 % pitch-referanse [rad]
 edc = zeros(size(t));                 % elevasjonsrate-referanse [rad/s]
 
-edc(t>=1  & t<4)  =  0.15;            % takeoff til ca. hover (juster lengden)
+edc(t>=1  & t<4)  =  0.15;            % takeoff til ca. hover (juster lengden)S
                                       % 4-8 s: stasjonaer hover (stoy, Vd-std)
 pc (t>=8  & t<13) =  0.15;             % pitch-steg opp
 pc (t>=13 & t<18) = -0.3;             % pitch-steg ned
@@ -141,3 +145,22 @@ idx = t>=30 & t<42;
 pc(idx) = 0.2*sin(2*pi*0.3*(t(idx) - 30));   % pitch-sinus 0.3 Hz (viser etterslep)
 
 ref_profile = [t pc edc];
+
+% TEST 0 (noise, hover run): takeoff, then hold still at the linearization point.
+% Adjust the takeoff length so that e ~ 0 (check the elevation encoder scope).
+if TEST == 0
+    pc  = zeros(size(t));
+    edc = zeros(size(t));
+    edc(t>=1 & t<4) = 0.15;           % takeoff (same as the normal profile)
+    ref_profile = [t pc edc];         % 4-45 s: stationary hover
+end
+
+% TEST 0, ground run: motors off in software (no physical power cut needed).
+% K = F = 0 and Vs0 = 0 give u = 0 and motor voltages = 0; the IMU still logs.
+% Afterwards set noise_case = 'hover', rerun this script and press Ctrl+D.
+if TEST == 0 && strcmp(noise_case, 'ground')
+    K   = zeros(size(K));
+    F   = zeros(size(F));
+    Vs0 = 0;
+    fprintf('\n*** MOTORS OFF (ground noise run): K = F = 0, Vs0 = 0 ***\n');
+end

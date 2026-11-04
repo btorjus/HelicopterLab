@@ -1,0 +1,10 @@
+-IC:\TTK\Helicopter\AfterLab4
+-IC:\TTK\Helicopter\AfterLab4\heli_p4_kalman_kf_r2020b_quarc_win64
+-I"C:\Program Files\MATLAB\R2020b\extern\include"
+-I"C:\Program Files\MATLAB\R2020b\simulink\include"
+-I"C:\Program Files\MATLAB\R2020b\rtw\c\src"
+-I"C:\Program Files\MATLAB\R2020b\rtw\c\src\ext_mode\common"
+-I"C:\Program Files\MATLAB\R2020b\toolbox\coder\rtiostream\src"
+-I"C:\Program Files\MATLAB\R2020b\toolbox\coder\rtiostream\src\utils"
+-I"C:\Program Files\Quanser\QUARC\blocks\communications"
+-I"C:\Program Files\Quanser\QUARC\include"
