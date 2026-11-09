@@ -7,9 +7,9 @@
  *
  * Code generation for model "heli_p4_kalman_kf_r2020b".
  *
- * Model version              : 11.0
+ * Model version              : 11.5
  * Simulink Coder version : 9.4 (R2020b) 29-Jul-2020
- * C source code generated on : Wed Nov  4 16:27:22 2026
+ * C source code generated on : Mon Nov  9 15:11:17 2026
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -882,16 +882,16 @@
 
 /* Block signals (default storage) */
 typedef struct {
+  real_T Switch[10];                   /* '<S9>/Switch' */
+  real_T Gain2[3];                     /* '<S9>/Gain2' */
+  real_T Gain1[3];                     /* '<S9>/Gain1' */
+  real_T ManualSwitch;                 /* '<Root>/Manual Switch' */
   real_T TravelCounttorad;             /* '<S2>/Travel: Count to rad' */
   real_T TravelTransferFcn;            /* '<S2>/Travel: Transfer Fcn' */
   real_T PitchCounttorad;              /* '<S2>/Pitch: Count to rad' */
   real_T PitchTransferFcn;             /* '<S2>/Pitch: Transfer Fcn' */
   real_T ElevationCounttorad;          /* '<S2>/Elevation: Count to rad' */
   real_T ElevationTransferFcn;         /* '<S2>/Elevation: Transfer Fcn' */
-  real_T Switch[10];                   /* '<S9>/Switch' */
-  real_T Gain1[3];                     /* '<S9>/Gain1' */
-  real_T Gain2[3];                     /* '<S9>/Gain2' */
-  real_T ManualSwitch;                 /* '<Root>/Manual Switch' */
   real_T FromWorkspace[2];             /* '<Root>/From Workspace' */
   real_T RateTransitionx;              /* '<S4>/Rate Transition: x' */
   real_T Joystick_gain_x;              /* '<S4>/Joystick_gain_x' */
@@ -905,6 +905,7 @@ typedef struct {
   real_T u[2];                         /* '<S6>/Subtract' */
   real_T Sum;                          /* '<Root>/Sum' */
   real_T TmpSignalConversionAtToFileInpo[34];
+  real_T Sum1;                         /* '<Root>/Sum1' */
   real_T FrontmotorSaturation;         /* '<S2>/Front motor: Saturation' */
   real_T BackmotorSaturation;          /* '<S2>/Back motor: Saturation' */
   real_T edotcedot;                    /* '<S12>/Sum1' */
@@ -942,14 +943,14 @@ typedef struct {
   t_card HILInitialize_Card;           /* '<Root>/HIL Initialize' */
   t_task HILReadEncoderTimebase_Task;  /* '<S2>/HIL Read Encoder Timebase' */
   struct {
+    void *LoggedData;
+  } P_diag_PWORK;                      /* '<Root>/P_diag' */
+
+  struct {
     void *TimePtr;
     void *DataPtr;
     void *RSimInfoPtr;
   } FromWorkspace_PWORK;               /* '<Root>/From Workspace' */
-
-  struct {
-    void *LoggedData;
-  } Scope_PWORK;                       /* '<Root>/Scope' */
 
   struct {
     void *FilePtr;
@@ -974,6 +975,10 @@ typedef struct {
   struct {
     void *LoggedData[3];
   } pdot_imuvpdot_PWORK;               /* '<Root>/pdot_imu v pdot' */
+
+  struct {
+    void *LoggedData;
+  } xandP_diag_PWORK;                  /* '<Root>/x^and P_diag' */
 
   struct {
     void *LoggedData;
@@ -1147,6 +1152,9 @@ struct P_heli_p4_kalman_kf_r2020b_T_ {
   real_T Vs0;                          /* Variable: Vs0
                                         * Referenced by: '<Root>/Vs0'
                                         */
+  real_T e_offset;                     /* Variable: e_offset
+                                        * Referenced by: '<Root>/e_offset'
+                                        */
   real_T x0[6];                        /* Variable: x0
                                         * Referenced by: '<S5>/Unit Delay'
                                         */
@@ -1213,6 +1221,21 @@ struct P_heli_p4_kalman_kf_r2020b_T_ {
   real_T HILInitialize_POWatchdog;     /* Expression: watchdog_pwm_outputs
                                         * Referenced by: '<Root>/HIL Initialize'
                                         */
+  real_T Constant_Value_p;             /* Expression: 0
+                                        * Referenced by: '<S9>/Constant'
+                                        */
+  real_T Constant1_Value_i;            /* Expression: 65
+                                        * Referenced by: '<S9>/Constant1'
+                                        */
+  real_T Memory_InitialCondition[10];  /* Expression: [0 0 0 0 0 0 0 0 0 0]
+                                        * Referenced by: '<S9>/Memory'
+                                        */
+  real_T Gain2_Gain[9];             /* Expression: [ 0, 0, 1; 0, 1, 0; -1, 0, 0]
+                                     * Referenced by: '<S9>/Gain2'
+                                     */
+  real_T Gain1_Gain[9];             /* Expression: [ 0, 0, 1; 0, 1, 0; -1, 0, 0]
+                                     * Referenced by: '<S9>/Gain1'
+                                     */
   real_T TravelCounttorad_Gain;        /* Expression: 2*pi/8192
                                         * Referenced by: '<S2>/Travel: Count to rad'
                                         */
@@ -1249,21 +1272,6 @@ struct P_heli_p4_kalman_kf_r2020b_T_ {
   real_T ElevationTransferFcn_D;   /* Computed Parameter: ElevationTransferFcn_D
                                     * Referenced by: '<S2>/Elevation: Transfer Fcn'
                                     */
-  real_T Constant_Value_p;             /* Expression: 0
-                                        * Referenced by: '<S9>/Constant'
-                                        */
-  real_T Constant1_Value_i;            /* Expression: 65
-                                        * Referenced by: '<S9>/Constant1'
-                                        */
-  real_T Memory_InitialCondition[10];  /* Expression: [0 0 0 0 0 0 0 0 0 0]
-                                        * Referenced by: '<S9>/Memory'
-                                        */
-  real_T Gain1_Gain[9];             /* Expression: [ 0, 0, 1; 0, 1, 0; -1, 0, 0]
-                                     * Referenced by: '<S9>/Gain1'
-                                     */
-  real_T Gain2_Gain[9];             /* Expression: [ 0, 0, 1; 0, 1, 0; -1, 0, 0]
-                                     * Referenced by: '<S9>/Gain2'
-                                     */
   real_T RateTransitionx_InitialConditio;/* Expression: 0
                                           * Referenced by: '<S4>/Rate Transition: x'
                                           */

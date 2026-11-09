@@ -7,9 +7,9 @@
  *
  * Code generation for model "Lab3_IMU_LQRI".
  *
- * Model version              : 11.23
+ * Model version              : 11.27
  * Simulink Coder version : 9.4 (R2020b) 29-Jul-2020
- * C source code generated on : Wed Oct 14 20:36:51 2026
+ * C source code generated on : Mon Nov  9 15:03:03 2026
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping

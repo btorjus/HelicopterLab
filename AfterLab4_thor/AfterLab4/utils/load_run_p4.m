@@ -35,6 +35,10 @@ function run = load_run_p4(name)
     run.travel = E(1,:);  run.travel_rate = E(2,:);
     run.p      = E(3,:);  run.p_rate      = E(4,:);
     run.e      = E(5,:);  run.e_rate      = E(6,:);
+    % Elevation encoder offset (Part I Task 2.1.2 never applied in Simulink)
+    run.e_offset = heli_e_offset();
+    run.e_raw    = run.e;
+    run.e        = run.e - run.e_offset;
     % encoder in estimator-state order [p pdot e edot lambda lambdadot]
     run.enc    = [run.p; run.p_rate; run.e; run.e_rate; run.travel; run.travel_rate];
     run.tk     = run.t;      % same time base (one To File block)

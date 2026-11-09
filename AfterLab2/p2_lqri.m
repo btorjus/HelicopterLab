@@ -50,7 +50,7 @@ end
 
 %% ---------- Step reference settings ----------
 pc_step    = 0.3;          % [rad]   (set 0 for elevation test)
-edot_pulse = 0;            % [rad/s] (set 0.1 for elevation test)
+edot_pulse = 0.1;            % [rad/s] (set 0.1 for elevation test)
 pulse_len  = 3;            % [s]
 
 %% ---------- Report ----------

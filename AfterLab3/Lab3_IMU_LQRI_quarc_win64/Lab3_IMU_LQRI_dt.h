@@ -7,9 +7,9 @@
  *
  * Code generation for model "Lab3_IMU_LQRI".
  *
- * Model version              : 11.23
+ * Model version              : 11.27
  * Simulink Coder version : 9.4 (R2020b) 29-Jul-2020
- * C source code generated on : Wed Oct 14 20:36:51 2026
+ * C source code generated on : Mon Nov  9 15:03:03 2026
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -80,7 +80,7 @@ static const char_T * rtDataTypeNames[] = {
 
 /* data type transitions for block I/O structure */
 static DataTypeTransition rtBTransitions[] = {
-  { (char_T *)(&Lab3_IMU_LQRI_B.TravelCounttorad), 0, 0, 83 },
+  { (char_T *)(&Lab3_IMU_LQRI_B.TravelCounttorad), 0, 0, 86 },
 
   { (char_T *)(&Lab3_IMU_LQRI_B.StreamCall1_o2), 3, 0, 1 }
   ,
@@ -95,7 +95,7 @@ static DataTypeTransition rtBTransitions[] = {
 
   { (char_T *)(&Lab3_IMU_LQRI_DW.HILReadEncoderTimebase_Task), 24, 0, 1 },
 
-  { (char_T *)(&Lab3_IMU_LQRI_DW.FromWorkspace_PWORK.TimePtr), 11, 0, 30 },
+  { (char_T *)(&Lab3_IMU_LQRI_DW.FromWorkspace_PWORK.TimePtr), 11, 0, 35 },
 
   { (char_T *)(&Lab3_IMU_LQRI_DW.HILInitialize_ClockModes[0]), 6, 0, 46 },
 
@@ -114,7 +114,7 @@ static DataTypeTransitionTable rtBTransTable = {
 
 /* data type transitions for Parameters structure */
 static DataTypeTransition rtPTransitions[] = {
-  { (char_T *)(&Lab3_IMU_LQRI_P.A_obs[0]), 0, 0, 77 },
+  { (char_T *)(&Lab3_IMU_LQRI_P.A_obs[0]), 0, 0, 78 },
 
   { (char_T *)(&Lab3_IMU_LQRI_P.HILWriteAnalog_channels[0]), 7, 0, 2 },
 
@@ -128,7 +128,7 @@ static DataTypeTransition rtPTransitions[] = {
 
   { (char_T *)(&Lab3_IMU_LQRI_P.HILInitialize_Active), 8, 0, 41 },
 
-  { (char_T *)(&Lab3_IMU_LQRI_P.HILReadEncoderTimebase_Overflow), 3, 0, 260 }
+  { (char_T *)(&Lab3_IMU_LQRI_P.HILReadEncoderTimebase_Overflow), 3, 0, 262 }
 };
 
 /* data type transition table for Parameters structure */

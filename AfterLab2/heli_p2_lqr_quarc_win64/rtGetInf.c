@@ -7,9 +7,9 @@
  *
  * Code generation for model "heli_p2_lqr".
  *
- * Model version              : 11.10
+ * Model version              : 11.11
  * Simulink Coder version : 9.4 (R2020b) 29-Jul-2020
- * C source code generated on : Wed Sep 23 19:15:53 2026
+ * C source code generated on : Mon Nov  9 14:42:22 2026
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping

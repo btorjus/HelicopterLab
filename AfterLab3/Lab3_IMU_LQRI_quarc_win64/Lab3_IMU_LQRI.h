@@ -7,9 +7,9 @@
  *
  * Code generation for model "Lab3_IMU_LQRI".
  *
- * Model version              : 11.23
+ * Model version              : 11.27
  * Simulink Coder version : 9.4 (R2020b) 29-Jul-2020
- * C source code generated on : Wed Oct 14 20:36:51 2026
+ * C source code generated on : Mon Nov  9 15:03:03 2026
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -894,20 +894,23 @@ typedef struct {
   real_T DataTypeConversion;           /* '<Root>/Data Type Conversion' */
   real_T Integrator[5];                /* '<S6>/Integrator' */
   real_T FromWorkspace[2];             /* '<Root>/From Workspace' */
+  real_T RateTransitionx;              /* '<S4>/Rate Transition: x' */
+  real_T Joystick_gain_x;              /* '<S4>/Joystick_gain_x' */
+  real_T Refp_c;                       /* '<Root>/Ref p_c' */
+  real_T RateTransitiony;              /* '<S4>/Rate Transition: y' */
+  real_T Joystick_gain_y;              /* '<S4>/Joystick_gain_y' */
+  real_T Refedot_c;                    /* '<Root>/Ref edot_c' */
   real_T Fr[2];                        /* '<S5>/Multiply' */
   real_T ManualSwitch;                 /* '<S5>/Manual Switch' */
   real_T Integrator_m[2];              /* '<S5>/Integrator' */
   real_T u[2];                         /* '<S5>/Subtract' */
   real_T Sum;                          /* '<Root>/Sum' */
   real_T TmpSignalConversionAtToFileInpo[27];
+  real_T Sum1;                         /* '<Root>/Sum1' */
   real_T FrontmotorSaturation;         /* '<S2>/Front motor: Saturation' */
   real_T BackmotorSaturation;          /* '<S2>/Back motor: Saturation' */
   real_T TmpSignalConversionAtIntegrator[2];/* '<S5>/Additional integrator states' */
-  real_T Sum1[5];                      /* '<S6>/Sum1' */
-  real_T RateTransitionx;              /* '<S4>/Rate Transition: x' */
-  real_T Joystick_gain_x;              /* '<S4>/Joystick_gain_x' */
-  real_T RateTransitiony;              /* '<S4>/Rate Transition: y' */
-  real_T Joystick_gain_y;              /* '<S4>/Joystick_gain_y' */
+  real_T Sum1_p[5];                    /* '<S6>/Sum1' */
   real_T euler_rates[3];
            /* '<S3>/Gyro vector to [pitch rate, elevation rate, travle rate]' */
   real_T angles[2];                    /* '<S3>/Acc til ang' */
@@ -925,9 +928,9 @@ typedef struct {
   real_T HILInitialize_POSortedFreqs[8];/* '<Root>/HIL Initialize' */
   real_T HILInitialize_POValues[8];    /* '<Root>/HIL Initialize' */
   real_T Memory_PreviousInput[10];     /* '<S9>/Memory' */
-  real_T HILWriteAnalog_Buffer[2];     /* '<S2>/HIL Write Analog' */
   real_T RateTransitionx_Buffer0;      /* '<S4>/Rate Transition: x' */
   real_T RateTransitiony_Buffer0;      /* '<S4>/Rate Transition: y' */
+  real_T HILWriteAnalog_Buffer[2];     /* '<S2>/HIL Write Analog' */
   t_stream StreamCall1_Stream;         /* '<S9>/Stream Call1' */
   t_game_controller GameController_Controller;/* '<S4>/Game Controller' */
   t_card HILInitialize_Card;           /* '<Root>/HIL Initialize' */
@@ -947,23 +950,23 @@ typedef struct {
   } ToFile_PWORK;                      /* '<Root>/To File' */
 
   struct {
-    void *LoggedData[2];
+    void *LoggedData[3];
   } e_imuve_PWORK;                     /* '<Root>/e_imu v e' */
 
   struct {
-    void *LoggedData[2];
+    void *LoggedData[3];
   } edot_imuvedot_PWORK;               /* '<Root>/edot_imu v edot' */
 
   struct {
-    void *LoggedData[2];
+    void *LoggedData[3];
   } lambdadot_imuvlambdadot_PWORK;     /* '<Root>/lambdadot_imu v lambdadot' */
 
   struct {
-    void *LoggedData[2];
+    void *LoggedData[3];
   } p_imuvp_PWORK;                     /* '<Root>/p_imu v p' */
 
   struct {
-    void *LoggedData[2];
+    void *LoggedData[3];
   } pdot_imuvpdot_PWORK;               /* '<Root>/pdot_imu v pdot' */
 
   struct {
@@ -997,6 +1000,14 @@ typedef struct {
 
   struct {
     void *LoggedData;
+  } XScope_PWORK;                      /* '<S4>/X: Scope' */
+
+  struct {
+    void *LoggedData;
+  } YScope_PWORK;                      /* '<S4>/Y: Scope' */
+
+  struct {
+    void *LoggedData;
   } VdScope_PWORK;                     /* '<S5>/V~d: Scope' */
 
   struct {
@@ -1014,14 +1025,6 @@ typedef struct {
   struct {
     void *LoggedData[2];
   } pcScoperad_PWORK;                  /* '<S5>/p~c: Scope [rad]' */
-
-  struct {
-    void *LoggedData;
-  } XScope_PWORK;                      /* '<S4>/X: Scope' */
-
-  struct {
-    void *LoggedData;
-  } YScope_PWORK;                      /* '<S4>/Y: Scope' */
 
   int32_T HILInitialize_ClockModes[3]; /* '<Root>/HIL Initialize' */
   int32_T HILInitialize_QuadratureModes[8];/* '<Root>/HIL Initialize' */
@@ -1131,6 +1134,9 @@ struct P_Lab3_IMU_LQRI_T_ {
                                         */
   real_T Vs0;                          /* Variable: Vs0
                                         * Referenced by: '<Root>/Vs0'
+                                        */
+  real_T e_offset;                     /* Variable: e_offset
+                                        * Referenced by: '<Root>/Offset'
                                         */
   uint32_T HILWriteAnalog_channels[2];/* Mask Parameter: HILWriteAnalog_channels
                                        * Referenced by: '<S2>/HIL Write Analog'
@@ -1246,30 +1252,6 @@ struct P_Lab3_IMU_LQRI_T_ {
   real_T Integrator_IC;                /* Expression: 0
                                         * Referenced by: '<S6>/Integrator'
                                         */
-  real_T Integrator_IC_c;              /* Expression: 0
-                                        * Referenced by: '<S5>/Integrator'
-                                        */
-  real_T Backgain_Gain;                /* Expression: 0.5
-                                        * Referenced by: '<S1>/Back gain'
-                                        */
-  real_T Frontgain_Gain;               /* Expression: 0.5
-                                        * Referenced by: '<S1>/Front gain'
-                                        */
-  real_T FrontmotorSaturation_UpperSat;/* Expression: 5
-                                        * Referenced by: '<S2>/Front motor: Saturation'
-                                        */
-  real_T FrontmotorSaturation_LowerSat;/* Expression: -5
-                                        * Referenced by: '<S2>/Front motor: Saturation'
-                                        */
-  real_T BackmotorSaturation_UpperSat; /* Expression: 5
-                                        * Referenced by: '<S2>/Back motor: Saturation'
-                                        */
-  real_T BackmotorSaturation_LowerSat; /* Expression: -5
-                                        * Referenced by: '<S2>/Back motor: Saturation'
-                                        */
-  real_T C_obs_Gain[25];               /* Expression: eye(5)
-                                        * Referenced by: '<S6>/C_obs'
-                                        */
   real_T RateTransitionx_InitialConditio;/* Expression: 0
                                           * Referenced by: '<S4>/Rate Transition: x'
                                           */
@@ -1293,6 +1275,30 @@ struct P_Lab3_IMU_LQRI_T_ {
                                         */
   real_T Gainy_Gain;                   /* Expression: 10/9
                                         * Referenced by: '<S4>/Gain: y'
+                                        */
+  real_T Integrator_IC_c;              /* Expression: 0
+                                        * Referenced by: '<S5>/Integrator'
+                                        */
+  real_T Backgain_Gain;                /* Expression: 0.5
+                                        * Referenced by: '<S1>/Back gain'
+                                        */
+  real_T Frontgain_Gain;               /* Expression: 0.5
+                                        * Referenced by: '<S1>/Front gain'
+                                        */
+  real_T FrontmotorSaturation_UpperSat;/* Expression: 5
+                                        * Referenced by: '<S2>/Front motor: Saturation'
+                                        */
+  real_T FrontmotorSaturation_LowerSat;/* Expression: -5
+                                        * Referenced by: '<S2>/Front motor: Saturation'
+                                        */
+  real_T BackmotorSaturation_UpperSat; /* Expression: 5
+                                        * Referenced by: '<S2>/Back motor: Saturation'
+                                        */
+  real_T BackmotorSaturation_LowerSat; /* Expression: -5
+                                        * Referenced by: '<S2>/Back motor: Saturation'
+                                        */
+  real_T C_obs_Gain[25];               /* Expression: eye(5)
+                                        * Referenced by: '<S6>/C_obs'
                                         */
   int32_T HILInitialize_CKChannels[3];
                                  /* Computed Parameter: HILInitialize_CKChannels
@@ -1511,6 +1517,13 @@ struct P_Lab3_IMU_LQRI_T_ {
   uint8_T StreamCall1_Endian;          /* Computed Parameter: StreamCall1_Endian
                                         * Referenced by: '<S9>/Stream Call1'
                                         */
+  uint8_T Refp_c_CurrentSetting;    /* Computed Parameter: Refp_c_CurrentSetting
+                                     * Referenced by: '<Root>/Ref p_c'
+                                     */
+  uint8_T Refedot_c_CurrentSetting;
+                                 /* Computed Parameter: Refedot_c_CurrentSetting
+                                  * Referenced by: '<Root>/Ref edot_c'
+                                  */
   uint8_T ManualSwitch_CurrentSetting;
                               /* Computed Parameter: ManualSwitch_CurrentSetting
                                * Referenced by: '<S5>/Manual Switch'

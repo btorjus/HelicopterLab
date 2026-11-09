@@ -7,9 +7,9 @@
  *
  * Code generation for model "heli_p4_kalman_kf_r2020b".
  *
- * Model version              : 11.0
+ * Model version              : 11.5
  * Simulink Coder version : 9.4 (R2020b) 29-Jul-2020
- * C source code generated on : Wed Nov  4 16:27:22 2026
+ * C source code generated on : Mon Nov  9 15:11:17 2026
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -198,8 +198,8 @@ void heli_p4_kalman_kf_r2020b_output0(void) /* Sample time: [0.0s, 0.0s] */
   real_T A_tmp[30];
   real_T X[30];
   real_T A[25];
-  real_T tmp_0[9];
-  real_T tmp[6];
+  real_T tmp[9];
+  real_T tmp_0[6];
   real_T tmp_1[5];
   real_T tmp_2[5];
   real_T tmp_3[5];
@@ -208,13 +208,13 @@ void heli_p4_kalman_kf_r2020b_output0(void) /* Sample time: [0.0s, 0.0s] */
   real_T euler_rates_tmp_1;
   real_T smax;
   int32_T c_ix;
+  int32_T d_j;
   int32_T i;
   int32_T ijA;
   int32_T ix;
-  int32_T jA;
+  int32_T iy;
   int32_T jBcol;
   int32_T kBcol;
-  int_T ri;
   int8_T b_I[36];
   int8_T ipiv[5];
   int8_T ipiv_0;
@@ -267,49 +267,6 @@ void heli_p4_kalman_kf_r2020b_output0(void) /* Sample time: [0.0s, 0.0s] */
       }
     }
 
-    /* Gain: '<S2>/Travel: Count to rad' */
-    heli_p4_kalman_kf_r2020b_B.TravelCounttorad =
-      heli_p4_kalman_kf_r2020b_P.TravelCounttorad_Gain *
-      rtb_HILReadEncoderTimebase_o1;
-
-    /* Gain: '<S2>/Pitch: Count to rad' */
-    heli_p4_kalman_kf_r2020b_B.PitchCounttorad =
-      heli_p4_kalman_kf_r2020b_P.PitchCounttorad_Gain *
-      rtb_HILReadEncoderTimebase_o2;
-  }
-
-  /* TransferFcn: '<S2>/Travel: Transfer Fcn' */
-  heli_p4_kalman_kf_r2020b_B.TravelTransferFcn = 0.0;
-  heli_p4_kalman_kf_r2020b_B.TravelTransferFcn +=
-    heli_p4_kalman_kf_r2020b_P.TravelTransferFcn_C *
-    heli_p4_kalman_kf_r2020b_X.TravelTransferFcn_CSTATE;
-  heli_p4_kalman_kf_r2020b_B.TravelTransferFcn +=
-    heli_p4_kalman_kf_r2020b_P.TravelTransferFcn_D *
-    heli_p4_kalman_kf_r2020b_B.TravelCounttorad;
-
-  /* TransferFcn: '<S2>/Pitch: Transfer Fcn' */
-  heli_p4_kalman_kf_r2020b_B.PitchTransferFcn = 0.0;
-  heli_p4_kalman_kf_r2020b_B.PitchTransferFcn +=
-    heli_p4_kalman_kf_r2020b_P.PitchTransferFcn_C *
-    heli_p4_kalman_kf_r2020b_X.PitchTransferFcn_CSTATE;
-  heli_p4_kalman_kf_r2020b_B.PitchTransferFcn +=
-    heli_p4_kalman_kf_r2020b_P.PitchTransferFcn_D *
-    heli_p4_kalman_kf_r2020b_B.PitchCounttorad;
-  if (rtmIsMajorTimeStep(heli_p4_kalman_kf_r2020b_M)) {
-    /* Gain: '<S2>/Elevation: Count to rad' */
-    heli_p4_kalman_kf_r2020b_B.ElevationCounttorad =
-      heli_p4_kalman_kf_r2020b_P.ElevationCounttorad_Gain * rtb_DeadZoney;
-  }
-
-  /* TransferFcn: '<S2>/Elevation: Transfer Fcn' */
-  heli_p4_kalman_kf_r2020b_B.ElevationTransferFcn = 0.0;
-  heli_p4_kalman_kf_r2020b_B.ElevationTransferFcn +=
-    heli_p4_kalman_kf_r2020b_P.ElevationTransferFcn_C *
-    heli_p4_kalman_kf_r2020b_X.ElevationTransferFcn_CSTATE;
-  heli_p4_kalman_kf_r2020b_B.ElevationTransferFcn +=
-    heli_p4_kalman_kf_r2020b_P.ElevationTransferFcn_D *
-    heli_p4_kalman_kf_r2020b_B.ElevationCounttorad;
-  if (rtmIsMajorTimeStep(heli_p4_kalman_kf_r2020b_M)) {
     /* S-Function (stream_call_block): '<S9>/Stream Call1' incorporates:
      *  Constant: '<S9>/Constant'
      *  S-Function (string_constant_block): '<S9>/String Constant'
@@ -476,66 +433,50 @@ void heli_p4_kalman_kf_r2020b_output0(void) /* Sample time: [0.0s, 0.0s] */
       /* End of Switch: '<S9>/Switch' */
     }
 
-    for (ri = 0; ri < 3; ri++) {
-      /* Gain: '<S9>/Gain1' */
-      heli_p4_kalman_kf_r2020b_B.Gain1[ri] = 0.0;
-
-      /* Gain: '<S9>/Gain2' */
-      heli_p4_kalman_kf_r2020b_B.Gain2[ri] = 0.0;
-
-      /* Gain: '<S9>/Gain1' */
-      heli_p4_kalman_kf_r2020b_B.Gain1[ri] +=
-        heli_p4_kalman_kf_r2020b_P.Gain1_Gain[ri] *
-        heli_p4_kalman_kf_r2020b_B.Switch[3];
-
-      /* Gain: '<S9>/Gain2' */
-      heli_p4_kalman_kf_r2020b_B.Gain2[ri] +=
-        heli_p4_kalman_kf_r2020b_P.Gain2_Gain[ri] *
-        heli_p4_kalman_kf_r2020b_B.Switch[0];
-
-      /* Gain: '<S9>/Gain1' */
-      heli_p4_kalman_kf_r2020b_B.Gain1[ri] +=
-        heli_p4_kalman_kf_r2020b_P.Gain1_Gain[ri + 3] *
-        heli_p4_kalman_kf_r2020b_B.Switch[4];
-
-      /* Gain: '<S9>/Gain2' */
-      heli_p4_kalman_kf_r2020b_B.Gain2[ri] +=
-        heli_p4_kalman_kf_r2020b_P.Gain2_Gain[ri + 3] *
-        heli_p4_kalman_kf_r2020b_B.Switch[1];
-
-      /* Gain: '<S9>/Gain1' */
-      heli_p4_kalman_kf_r2020b_B.Gain1[ri] +=
-        heli_p4_kalman_kf_r2020b_P.Gain1_Gain[ri + 6] *
-        heli_p4_kalman_kf_r2020b_B.Switch[5];
-
-      /* Gain: '<S9>/Gain2' */
-      heli_p4_kalman_kf_r2020b_B.Gain2[ri] +=
-        heli_p4_kalman_kf_r2020b_P.Gain2_Gain[ri + 6] *
-        heli_p4_kalman_kf_r2020b_B.Switch[2];
-    }
-
-    /* ManualSwitch: '<Root>/Manual Switch' */
-    if (heli_p4_kalman_kf_r2020b_P.ManualSwitch_CurrentSetting == 1) {
-      /* ManualSwitch: '<Root>/Manual Switch' incorporates:
-       *  DataTypeConversion: '<Root>/Data Type Conversion'
-       */
-      heli_p4_kalman_kf_r2020b_B.ManualSwitch = rtb_StreamRead1_o3;
-    } else {
-      /* ManualSwitch: '<Root>/Manual Switch' incorporates:
-       *  Constant: '<Root>/Constant'
-       */
-      heli_p4_kalman_kf_r2020b_B.ManualSwitch =
-        heli_p4_kalman_kf_r2020b_P.Constant_Value_j;
-    }
-
-    /* End of ManualSwitch: '<Root>/Manual Switch' */
-
-    /* MATLAB Function: '<S3>/Acc til ang' */
     /* MATLAB Function 'IMU/Acc til ang': '<S7>:1' */
     /* '<S7>:1:2' */
     /* '<S7>:1:3' */
     /* '<S7>:1:4' */
     /* '<S7>:1:5' */
+    for (d_j = 0; d_j < 3; d_j++) {
+      /* Gain: '<S9>/Gain2' */
+      heli_p4_kalman_kf_r2020b_B.Gain2[d_j] = 0.0;
+
+      /* Gain: '<S9>/Gain1' */
+      heli_p4_kalman_kf_r2020b_B.Gain1[d_j] = 0.0;
+
+      /* Gain: '<S9>/Gain2' */
+      heli_p4_kalman_kf_r2020b_B.Gain2[d_j] +=
+        heli_p4_kalman_kf_r2020b_P.Gain2_Gain[d_j] *
+        heli_p4_kalman_kf_r2020b_B.Switch[0];
+
+      /* Gain: '<S9>/Gain1' */
+      heli_p4_kalman_kf_r2020b_B.Gain1[d_j] +=
+        heli_p4_kalman_kf_r2020b_P.Gain1_Gain[d_j] *
+        heli_p4_kalman_kf_r2020b_B.Switch[3];
+
+      /* Gain: '<S9>/Gain2' */
+      heli_p4_kalman_kf_r2020b_B.Gain2[d_j] +=
+        heli_p4_kalman_kf_r2020b_P.Gain2_Gain[d_j + 3] *
+        heli_p4_kalman_kf_r2020b_B.Switch[1];
+
+      /* Gain: '<S9>/Gain1' */
+      heli_p4_kalman_kf_r2020b_B.Gain1[d_j] +=
+        heli_p4_kalman_kf_r2020b_P.Gain1_Gain[d_j + 3] *
+        heli_p4_kalman_kf_r2020b_B.Switch[4];
+
+      /* Gain: '<S9>/Gain2' */
+      heli_p4_kalman_kf_r2020b_B.Gain2[d_j] +=
+        heli_p4_kalman_kf_r2020b_P.Gain2_Gain[d_j + 6] *
+        heli_p4_kalman_kf_r2020b_B.Switch[2];
+
+      /* Gain: '<S9>/Gain1' */
+      heli_p4_kalman_kf_r2020b_B.Gain1[d_j] +=
+        heli_p4_kalman_kf_r2020b_P.Gain1_Gain[d_j + 6] *
+        heli_p4_kalman_kf_r2020b_B.Switch[5];
+    }
+
+    /* MATLAB Function: '<S3>/Acc til ang' */
     heli_p4_kalman_kf_r2020b_B.angles[0] = rt_atan2d_snf
       (-heli_p4_kalman_kf_r2020b_B.Gain2[1], -heli_p4_kalman_kf_r2020b_B.Gain2[2]);
     heli_p4_kalman_kf_r2020b_B.angles[1] = rt_atan2d_snf
@@ -554,26 +495,42 @@ void heli_p4_kalman_kf_r2020b_output0(void) /* Sample time: [0.0s, 0.0s] */
     euler_rates_tmp = sin(heli_p4_kalman_kf_r2020b_B.angles[0]);
     euler_rates_tmp_0 = cos(heli_p4_kalman_kf_r2020b_B.angles[0]);
     euler_rates_tmp_1 = cos(heli_p4_kalman_kf_r2020b_B.angles[1]);
-    tmp_0[0] = 1.0;
-    tmp_0[3] = euler_rates_tmp * smax;
-    tmp_0[6] = euler_rates_tmp_0 * smax;
-    tmp_0[1] = 0.0;
-    tmp_0[4] = euler_rates_tmp_0;
-    tmp_0[7] = -euler_rates_tmp;
-    tmp_0[2] = 0.0;
-    tmp_0[5] = euler_rates_tmp / euler_rates_tmp_1;
-    tmp_0[8] = euler_rates_tmp_0 / euler_rates_tmp_1;
-    for (ri = 0; ri < 3; ri++) {
-      heli_p4_kalman_kf_r2020b_B.euler_rates[ri] = 0.0;
-      heli_p4_kalman_kf_r2020b_B.euler_rates[ri] += tmp_0[ri] *
+    tmp[0] = 1.0;
+    tmp[3] = euler_rates_tmp * smax;
+    tmp[6] = euler_rates_tmp_0 * smax;
+    tmp[1] = 0.0;
+    tmp[4] = euler_rates_tmp_0;
+    tmp[7] = -euler_rates_tmp;
+    tmp[2] = 0.0;
+    tmp[5] = euler_rates_tmp / euler_rates_tmp_1;
+    tmp[8] = euler_rates_tmp_0 / euler_rates_tmp_1;
+    for (d_j = 0; d_j < 3; d_j++) {
+      heli_p4_kalman_kf_r2020b_B.euler_rates[d_j] = 0.0;
+      heli_p4_kalman_kf_r2020b_B.euler_rates[d_j] += tmp[d_j] *
         heli_p4_kalman_kf_r2020b_B.Gain1[0];
-      heli_p4_kalman_kf_r2020b_B.euler_rates[ri] += tmp_0[ri + 3] *
+      heli_p4_kalman_kf_r2020b_B.euler_rates[d_j] += tmp[d_j + 3] *
         heli_p4_kalman_kf_r2020b_B.Gain1[1];
-      heli_p4_kalman_kf_r2020b_B.euler_rates[ri] += tmp_0[ri + 6] *
+      heli_p4_kalman_kf_r2020b_B.euler_rates[d_j] += tmp[d_j + 6] *
         heli_p4_kalman_kf_r2020b_B.Gain1[2];
     }
 
     /* End of MATLAB Function: '<S3>/Gyro vector to [pitch rate, elevation rate, travle rate]' */
+
+    /* ManualSwitch: '<Root>/Manual Switch' */
+    if (heli_p4_kalman_kf_r2020b_P.ManualSwitch_CurrentSetting == 1) {
+      /* ManualSwitch: '<Root>/Manual Switch' incorporates:
+       *  DataTypeConversion: '<Root>/Data Type Conversion'
+       */
+      heli_p4_kalman_kf_r2020b_B.ManualSwitch = rtb_StreamRead1_o3;
+    } else {
+      /* ManualSwitch: '<Root>/Manual Switch' incorporates:
+       *  Constant: '<Root>/Constant'
+       */
+      heli_p4_kalman_kf_r2020b_B.ManualSwitch =
+        heli_p4_kalman_kf_r2020b_P.Constant_Value_j;
+    }
+
+    /* End of ManualSwitch: '<Root>/Manual Switch' */
 
     /* MATLAB Function: '<S5>/MATLAB Function1' incorporates:
      *  UnitDelay: '<S5>/Unit Delay'
@@ -584,136 +541,136 @@ void heli_p4_kalman_kf_r2020b_output0(void) /* Sample time: [0.0s, 0.0s] */
       /* '<S10>:1:13' */
       /* '<S10>:1:14' */
       /* '<S10>:1:15' */
-      for (ri = 0; ri < 5; ri++) {
-        for (jA = 0; jA < 6; jA++) {
-          i = 5 * jA + ri;
-          A_tmp[jA + 6 * ri] = heli_p4_kalman_kf_r2020b_P.Cd[i];
+      for (d_j = 0; d_j < 5; d_j++) {
+        for (iy = 0; iy < 6; iy++) {
+          i = 5 * iy + d_j;
+          A_tmp[iy + 6 * d_j] = heli_p4_kalman_kf_r2020b_P.Cd[i];
           X[i] = 0.0;
           for (jBcol = 0; jBcol < 6; jBcol++) {
-            X[i] += heli_p4_kalman_kf_r2020b_P.Cd[5 * jBcol + ri] *
-              heli_p4_kalman_kf_r2020b_DW.UnitDelay1_DSTATE[6 * jA + jBcol];
+            X[i] += heli_p4_kalman_kf_r2020b_P.Cd[5 * jBcol + d_j] *
+              heli_p4_kalman_kf_r2020b_DW.UnitDelay1_DSTATE[6 * iy + jBcol];
           }
         }
       }
 
-      for (ri = 0; ri < 5; ri++) {
-        for (jA = 0; jA < 5; jA++) {
+      for (d_j = 0; d_j < 5; d_j++) {
+        for (iy = 0; iy < 5; iy++) {
           smax = 0.0;
           for (jBcol = 0; jBcol < 6; jBcol++) {
-            smax += X[5 * jBcol + ri] * A_tmp[6 * jA + jBcol];
+            smax += X[5 * jBcol + d_j] * A_tmp[6 * iy + jBcol];
           }
 
-          i = 5 * jA + ri;
+          i = 5 * iy + d_j;
           A[i] = heli_p4_kalman_kf_r2020b_P.Rd[i] + smax;
         }
 
-        ipiv[ri] = (int8_T)(ri + 1);
+        ipiv[d_j] = (int8_T)(d_j + 1);
       }
 
-      for (ri = 0; ri < 4; ri++) {
-        jBcol = ri * 6;
-        jA = 0;
+      for (d_j = 0; d_j < 4; d_j++) {
+        jBcol = d_j * 6;
+        iy = 0;
         ix = jBcol;
         smax = fabs(A[jBcol]);
-        for (kBcol = 2; kBcol <= 5 - ri; kBcol++) {
+        for (kBcol = 2; kBcol <= 5 - d_j; kBcol++) {
           ix++;
           euler_rates_tmp = fabs(A[ix]);
           if (euler_rates_tmp > smax) {
-            jA = kBcol - 1;
+            iy = kBcol - 1;
             smax = euler_rates_tmp;
           }
         }
 
-        if (A[jBcol + jA] != 0.0) {
-          if (jA != 0) {
-            jA += ri;
-            ipiv[ri] = (int8_T)(jA + 1);
-            ix = ri;
+        if (A[jBcol + iy] != 0.0) {
+          if (iy != 0) {
+            iy += d_j;
+            ipiv[d_j] = (int8_T)(iy + 1);
+            ix = d_j;
             for (kBcol = 0; kBcol < 5; kBcol++) {
               smax = A[ix];
-              A[ix] = A[jA];
-              A[jA] = smax;
+              A[ix] = A[iy];
+              A[iy] = smax;
               ix += 5;
-              jA += 5;
+              iy += 5;
             }
           }
 
-          jA = (jBcol - ri) + 5;
-          for (ix = jBcol + 1; ix < jA; ix++) {
+          iy = (jBcol - d_j) + 5;
+          for (ix = jBcol + 1; ix < iy; ix++) {
             A[ix] /= A[jBcol];
           }
         }
 
-        jA = jBcol;
+        iy = jBcol;
         ix = jBcol + 5;
-        for (kBcol = 0; kBcol <= 3 - ri; kBcol++) {
+        for (kBcol = 0; kBcol <= 3 - d_j; kBcol++) {
           if (A[ix] != 0.0) {
             smax = -A[ix];
             c_ix = jBcol + 1;
-            i = (jA - ri) + 10;
-            for (ijA = jA + 6; ijA < i; ijA++) {
+            i = (iy - d_j) + 10;
+            for (ijA = iy + 6; ijA < i; ijA++) {
               A[ijA] += A[c_ix] * smax;
               c_ix++;
             }
           }
 
           ix += 5;
-          jA += 5;
+          iy += 5;
         }
       }
 
-      for (ri = 0; ri < 5; ri++) {
-        for (jA = 0; jA < 6; jA++) {
-          i = jA + 6 * ri;
+      for (d_j = 0; d_j < 5; d_j++) {
+        for (iy = 0; iy < 6; iy++) {
+          i = iy + 6 * d_j;
           X[i] = 0.0;
           for (jBcol = 0; jBcol < 6; jBcol++) {
-            X[i] += heli_p4_kalman_kf_r2020b_DW.UnitDelay1_DSTATE[6 * jBcol + jA]
-              * A_tmp[6 * ri + jBcol];
+            X[i] += heli_p4_kalman_kf_r2020b_DW.UnitDelay1_DSTATE[6 * jBcol + iy]
+              * A_tmp[6 * d_j + jBcol];
           }
         }
       }
 
-      for (ri = 0; ri < 5; ri++) {
-        jBcol = 6 * ri;
-        jA = 5 * ri;
-        for (ix = 0; ix < ri; ix++) {
+      for (d_j = 0; d_j < 5; d_j++) {
+        jBcol = 6 * d_j;
+        iy = 5 * d_j;
+        for (ix = 0; ix < d_j; ix++) {
           kBcol = 6 * ix;
-          if (A[ix + jA] != 0.0) {
+          if (A[ix + iy] != 0.0) {
             for (c_ix = 0; c_ix < 6; c_ix++) {
               i = c_ix + jBcol;
-              X[i] -= A[ix + jA] * X[c_ix + kBcol];
+              X[i] -= A[ix + iy] * X[c_ix + kBcol];
             }
           }
         }
 
-        smax = 1.0 / A[ri + jA];
-        for (jA = 0; jA < 6; jA++) {
-          i = jA + jBcol;
+        smax = 1.0 / A[d_j + iy];
+        for (iy = 0; iy < 6; iy++) {
+          i = iy + jBcol;
           X[i] *= smax;
         }
       }
 
-      for (ri = 4; ri >= 0; ri--) {
-        jBcol = 6 * ri;
-        jA = 5 * ri - 1;
-        for (ix = ri + 2; ix < 6; ix++) {
+      for (d_j = 4; d_j >= 0; d_j--) {
+        jBcol = 6 * d_j;
+        iy = 5 * d_j - 1;
+        for (ix = d_j + 2; ix < 6; ix++) {
           kBcol = (ix - 1) * 6;
-          if (A[ix + jA] != 0.0) {
+          if (A[ix + iy] != 0.0) {
             for (c_ix = 0; c_ix < 6; c_ix++) {
               i = c_ix + jBcol;
-              X[i] -= A[ix + jA] * X[c_ix + kBcol];
+              X[i] -= A[ix + iy] * X[c_ix + kBcol];
             }
           }
         }
       }
 
-      for (ri = 3; ri >= 0; ri--) {
-        ipiv_0 = ipiv[ri];
-        if (ri + 1 != ipiv_0) {
-          for (jA = 0; jA < 6; jA++) {
-            jBcol = 6 * ri + jA;
+      for (d_j = 3; d_j >= 0; d_j--) {
+        ipiv_0 = ipiv[d_j];
+        if (d_j + 1 != ipiv_0) {
+          for (iy = 0; iy < 6; iy++) {
+            jBcol = 6 * d_j + iy;
             smax = X[jBcol];
-            i = (ipiv_0 - 1) * 6 + jA;
+            i = (ipiv_0 - 1) * 6 + iy;
             X[jBcol] = X[i];
             X[i] = smax;
           }
@@ -729,92 +686,92 @@ void heli_p4_kalman_kf_r2020b_output0(void) /* Sample time: [0.0s, 0.0s] */
       tmp_1[2] = heli_p4_kalman_kf_r2020b_B.angles[1];
       tmp_1[3] = heli_p4_kalman_kf_r2020b_B.euler_rates[1];
       tmp_1[4] = heli_p4_kalman_kf_r2020b_B.euler_rates[2];
-      for (ri = 0; ri < 5; ri++) {
-        tmp_2[ri] = 0.0;
-        for (jA = 0; jA < 6; jA++) {
-          tmp_2[ri] += heli_p4_kalman_kf_r2020b_P.Cd[5 * jA + ri] *
-            heli_p4_kalman_kf_r2020b_DW.UnitDelay_DSTATE[jA];
+      for (d_j = 0; d_j < 5; d_j++) {
+        tmp_2[d_j] = 0.0;
+        for (iy = 0; iy < 6; iy++) {
+          tmp_2[d_j] += heli_p4_kalman_kf_r2020b_P.Cd[5 * iy + d_j] *
+            heli_p4_kalman_kf_r2020b_DW.UnitDelay_DSTATE[iy];
         }
 
-        tmp_3[ri] = tmp_1[ri] - tmp_2[ri];
+        tmp_3[d_j] = tmp_1[d_j] - tmp_2[d_j];
       }
 
-      for (ri = 0; ri < 6; ri++) {
+      for (d_j = 0; d_j < 6; d_j++) {
         smax = 0.0;
-        for (jA = 0; jA < 5; jA++) {
-          smax += X[6 * jA + ri] * tmp_3[jA];
+        for (iy = 0; iy < 5; iy++) {
+          smax += X[6 * iy + d_j] * tmp_3[iy];
         }
 
-        heli_p4_kalman_kf_r2020b_B.x_hat[ri] =
-          heli_p4_kalman_kf_r2020b_DW.UnitDelay_DSTATE[ri] + smax;
+        heli_p4_kalman_kf_r2020b_B.x_hat[d_j] =
+          heli_p4_kalman_kf_r2020b_DW.UnitDelay_DSTATE[d_j] + smax;
       }
 
       /* '<S10>:1:17' */
-      for (ri = 0; ri < 36; ri++) {
-        b_I[ri] = 0;
+      for (d_j = 0; d_j < 36; d_j++) {
+        b_I[d_j] = 0;
       }
 
-      for (ri = 0; ri < 6; ri++) {
-        b_I[ri + 6 * ri] = 1;
+      for (d_j = 0; d_j < 6; d_j++) {
+        b_I[d_j + 6 * d_j] = 1;
       }
 
       /* '<S10>:1:18' */
-      for (ri = 0; ri < 6; ri++) {
-        for (jA = 0; jA < 6; jA++) {
+      for (d_j = 0; d_j < 6; d_j++) {
+        for (iy = 0; iy < 6; iy++) {
           smax = 0.0;
           for (jBcol = 0; jBcol < 5; jBcol++) {
-            smax += X[6 * jBcol + ri] * heli_p4_kalman_kf_r2020b_P.Cd[5 * jA +
+            smax += X[6 * jBcol + d_j] * heli_p4_kalman_kf_r2020b_P.Cd[5 * iy +
               jBcol];
           }
 
-          i = 6 * jA + ri;
+          i = 6 * iy + d_j;
           IKC[i] = (real_T)b_I[i] - smax;
         }
 
-        for (jA = 0; jA < 6; jA++) {
-          i = ri + 6 * jA;
+        for (iy = 0; iy < 6; iy++) {
+          i = d_j + 6 * iy;
           IKC_0[i] = 0.0;
           for (jBcol = 0; jBcol < 6; jBcol++) {
-            IKC_0[i] += IKC[6 * jBcol + ri] *
-              heli_p4_kalman_kf_r2020b_DW.UnitDelay1_DSTATE[6 * jA + jBcol];
+            IKC_0[i] += IKC[6 * jBcol + d_j] *
+              heli_p4_kalman_kf_r2020b_DW.UnitDelay1_DSTATE[6 * iy + jBcol];
           }
         }
 
-        for (jA = 0; jA < 5; jA++) {
-          i = ri + 6 * jA;
+        for (iy = 0; iy < 5; iy++) {
+          i = d_j + 6 * iy;
           A_tmp[i] = 0.0;
           for (jBcol = 0; jBcol < 5; jBcol++) {
-            A_tmp[i] += X[6 * jBcol + ri] * heli_p4_kalman_kf_r2020b_P.Rd[5 * jA
-              + jBcol];
+            A_tmp[i] += X[6 * jBcol + d_j] * heli_p4_kalman_kf_r2020b_P.Rd[5 *
+              iy + jBcol];
           }
         }
       }
 
-      for (ri = 0; ri < 6; ri++) {
-        for (jA = 0; jA < 6; jA++) {
-          i = ri + 6 * jA;
+      for (d_j = 0; d_j < 6; d_j++) {
+        for (iy = 0; iy < 6; iy++) {
+          i = d_j + 6 * iy;
           IKC_1[i] = 0.0;
           for (jBcol = 0; jBcol < 6; jBcol++) {
-            IKC_1[i] += IKC_0[6 * jBcol + ri] * IKC[6 * jBcol + jA];
+            IKC_1[i] += IKC_0[6 * jBcol + d_j] * IKC[6 * jBcol + iy];
           }
 
           X_0[i] = 0.0;
           for (jBcol = 0; jBcol < 5; jBcol++) {
-            X_0[i] += A_tmp[6 * jBcol + ri] * X[6 * jBcol + jA];
+            X_0[i] += A_tmp[6 * jBcol + d_j] * X[6 * jBcol + iy];
           }
         }
       }
 
-      for (ri = 0; ri < 36; ri++) {
-        heli_p4_kalman_kf_r2020b_B.P_hat[ri] = IKC_1[ri] + X_0[ri];
+      for (d_j = 0; d_j < 36; d_j++) {
+        heli_p4_kalman_kf_r2020b_B.P_hat[d_j] = IKC_1[d_j] + X_0[d_j];
       }
 
       /* '<S10>:1:19' */
-      for (ri = 0; ri < 6; ri++) {
-        for (jA = 0; jA < 6; jA++) {
-          jBcol = 6 * ri + jA;
+      for (d_j = 0; d_j < 6; d_j++) {
+        for (iy = 0; iy < 6; iy++) {
+          jBcol = 6 * d_j + iy;
           IKC_0[jBcol] = (heli_p4_kalman_kf_r2020b_B.P_hat[jBcol] +
-                          heli_p4_kalman_kf_r2020b_B.P_hat[6 * jA + ri]) * 0.5;
+                          heli_p4_kalman_kf_r2020b_B.P_hat[6 * iy + d_j]) * 0.5;
         }
       }
 
@@ -834,13 +791,55 @@ void heli_p4_kalman_kf_r2020b_output0(void) /* Sample time: [0.0s, 0.0s] */
     }
 
     /* '<S10>:1:24' */
-    for (ri = 0; ri < 6; ri++) {
-      heli_p4_kalman_kf_r2020b_B.P_diag[ri] = heli_p4_kalman_kf_r2020b_B.P_hat[6
-        * ri + ri];
+    for (d_j = 0; d_j < 6; d_j++) {
+      heli_p4_kalman_kf_r2020b_B.P_diag[d_j] = heli_p4_kalman_kf_r2020b_B.P_hat
+        [6 * d_j + d_j];
     }
 
     /* End of MATLAB Function: '<S5>/MATLAB Function1' */
+    /* Gain: '<S2>/Travel: Count to rad' */
+    heli_p4_kalman_kf_r2020b_B.TravelCounttorad =
+      heli_p4_kalman_kf_r2020b_P.TravelCounttorad_Gain *
+      rtb_HILReadEncoderTimebase_o1;
 
+    /* Gain: '<S2>/Pitch: Count to rad' */
+    heli_p4_kalman_kf_r2020b_B.PitchCounttorad =
+      heli_p4_kalman_kf_r2020b_P.PitchCounttorad_Gain *
+      rtb_HILReadEncoderTimebase_o2;
+  }
+
+  /* TransferFcn: '<S2>/Travel: Transfer Fcn' */
+  heli_p4_kalman_kf_r2020b_B.TravelTransferFcn = 0.0;
+  heli_p4_kalman_kf_r2020b_B.TravelTransferFcn +=
+    heli_p4_kalman_kf_r2020b_P.TravelTransferFcn_C *
+    heli_p4_kalman_kf_r2020b_X.TravelTransferFcn_CSTATE;
+  heli_p4_kalman_kf_r2020b_B.TravelTransferFcn +=
+    heli_p4_kalman_kf_r2020b_P.TravelTransferFcn_D *
+    heli_p4_kalman_kf_r2020b_B.TravelCounttorad;
+
+  /* TransferFcn: '<S2>/Pitch: Transfer Fcn' */
+  heli_p4_kalman_kf_r2020b_B.PitchTransferFcn = 0.0;
+  heli_p4_kalman_kf_r2020b_B.PitchTransferFcn +=
+    heli_p4_kalman_kf_r2020b_P.PitchTransferFcn_C *
+    heli_p4_kalman_kf_r2020b_X.PitchTransferFcn_CSTATE;
+  heli_p4_kalman_kf_r2020b_B.PitchTransferFcn +=
+    heli_p4_kalman_kf_r2020b_P.PitchTransferFcn_D *
+    heli_p4_kalman_kf_r2020b_B.PitchCounttorad;
+  if (rtmIsMajorTimeStep(heli_p4_kalman_kf_r2020b_M)) {
+    /* Gain: '<S2>/Elevation: Count to rad' */
+    heli_p4_kalman_kf_r2020b_B.ElevationCounttorad =
+      heli_p4_kalman_kf_r2020b_P.ElevationCounttorad_Gain * rtb_DeadZoney;
+  }
+
+  /* TransferFcn: '<S2>/Elevation: Transfer Fcn' */
+  heli_p4_kalman_kf_r2020b_B.ElevationTransferFcn = 0.0;
+  heli_p4_kalman_kf_r2020b_B.ElevationTransferFcn +=
+    heli_p4_kalman_kf_r2020b_P.ElevationTransferFcn_C *
+    heli_p4_kalman_kf_r2020b_X.ElevationTransferFcn_CSTATE;
+  heli_p4_kalman_kf_r2020b_B.ElevationTransferFcn +=
+    heli_p4_kalman_kf_r2020b_P.ElevationTransferFcn_D *
+    heli_p4_kalman_kf_r2020b_B.ElevationCounttorad;
+  if (rtmIsMajorTimeStep(heli_p4_kalman_kf_r2020b_M)) {
     /* FromWorkspace: '<Root>/From Workspace' */
     {
       real_T *pDataValues = (real_T *)
@@ -1086,16 +1085,17 @@ void heli_p4_kalman_kf_r2020b_output0(void) /* Sample time: [0.0s, 0.0s] */
   /* SignalConversion generated from: '<S6>/Gain' */
   tmp_1[1] = heli_p4_kalman_kf_r2020b_B.x_hat[1];
   tmp_1[4] = heli_p4_kalman_kf_r2020b_B.Integrator[1];
-  for (ri = 0; ri < 2; ri++) {
+  for (d_j = 0; d_j < 2; d_j++) {
     /* Sum: '<S6>/Subtract' incorporates:
      *  Gain: '<S6>/Gain'
      */
     smax = 0.0;
-    for (jA = 0; jA < 5; jA++) {
-      smax += heli_p4_kalman_kf_r2020b_P.K[(jA << 1) + ri] * tmp_1[jA];
+    for (iy = 0; iy < 5; iy++) {
+      smax += heli_p4_kalman_kf_r2020b_P.K[(iy << 1) + d_j] * tmp_1[iy];
     }
 
-    heli_p4_kalman_kf_r2020b_B.u[ri] = heli_p4_kalman_kf_r2020b_B.Fr[ri] - smax;
+    heli_p4_kalman_kf_r2020b_B.u[d_j] = heli_p4_kalman_kf_r2020b_B.Fr[d_j] -
+      smax;
 
     /* End of Sum: '<S6>/Subtract' */
   }
@@ -1159,6 +1159,7 @@ void heli_p4_kalman_kf_r2020b_output0(void) /* Sample time: [0.0s, 0.0s] */
     }
 
     /* End of SignalConversion generated from: '<Root>/To File' */
+
     /* ToFile: '<Root>/To File' */
     if (rtmIsMajorTimeStep(heli_p4_kalman_kf_r2020b_M)) {
       if (rtmIsMajorTimeStep(heli_p4_kalman_kf_r2020b_M) ) {
@@ -1258,6 +1259,13 @@ void heli_p4_kalman_kf_r2020b_output0(void) /* Sample time: [0.0s, 0.0s] */
         }
       }
     }
+
+    /* Sum: '<Root>/Sum1' incorporates:
+     *  Constant: '<Root>/e_offset'
+     */
+    heli_p4_kalman_kf_r2020b_B.Sum1 =
+      heli_p4_kalman_kf_r2020b_B.ElevationCounttorad -
+      heli_p4_kalman_kf_r2020b_P.e_offset;
   }
 
   /* Gain: '<S1>/Front gain' incorporates:
@@ -1340,40 +1348,40 @@ void heli_p4_kalman_kf_r2020b_output0(void) /* Sample time: [0.0s, 0.0s] */
   /* MATLAB Function 'Kalman Filter/MATLAB Function2': '<S11>:1' */
   /* '<S11>:1:9' */
   /* '<S11>:1:10' */
-  for (ri = 0; ri < 6; ri++) {
-    tmp[ri] = 0.0;
-    for (jA = 0; jA < 6; jA++) {
-      jBcol = 6 * jA + ri;
+  for (d_j = 0; d_j < 6; d_j++) {
+    tmp_0[d_j] = 0.0;
+    for (iy = 0; iy < 6; iy++) {
+      jBcol = 6 * iy + d_j;
       IKC_0[jBcol] = 0.0;
       for (i = 0; i < 6; i++) {
-        IKC_0[jBcol] += heli_p4_kalman_kf_r2020b_P.Ad[6 * i + ri] *
-          heli_p4_kalman_kf_r2020b_B.P_hat[6 * jA + i];
+        IKC_0[jBcol] += heli_p4_kalman_kf_r2020b_P.Ad[6 * i + d_j] *
+          heli_p4_kalman_kf_r2020b_B.P_hat[6 * iy + i];
       }
 
-      tmp[ri] += heli_p4_kalman_kf_r2020b_P.Ad[jBcol] *
-        heli_p4_kalman_kf_r2020b_B.x_hat[jA];
+      tmp_0[d_j] += heli_p4_kalman_kf_r2020b_P.Ad[jBcol] *
+        heli_p4_kalman_kf_r2020b_B.x_hat[iy];
     }
 
-    heli_p4_kalman_kf_r2020b_B.x_bar_next[ri] = tmp[ri] +
-      (heli_p4_kalman_kf_r2020b_P.Bd[ri + 6] * heli_p4_kalman_kf_r2020b_B.u[1] +
-       heli_p4_kalman_kf_r2020b_P.Bd[ri] * heli_p4_kalman_kf_r2020b_B.u[0]);
-    for (jA = 0; jA < 6; jA++) {
+    heli_p4_kalman_kf_r2020b_B.x_bar_next[d_j] = tmp_0[d_j] +
+      (heli_p4_kalman_kf_r2020b_P.Bd[d_j + 6] * heli_p4_kalman_kf_r2020b_B.u[1]
+       + heli_p4_kalman_kf_r2020b_P.Bd[d_j] * heli_p4_kalman_kf_r2020b_B.u[0]);
+    for (iy = 0; iy < 6; iy++) {
       smax = 0.0;
       for (jBcol = 0; jBcol < 6; jBcol++) {
-        smax += IKC_0[6 * jBcol + ri] * heli_p4_kalman_kf_r2020b_P.Ad[6 * jBcol
-          + jA];
+        smax += IKC_0[6 * jBcol + d_j] * heli_p4_kalman_kf_r2020b_P.Ad[6 * jBcol
+          + iy];
       }
 
-      i = 6 * jA + ri;
+      i = 6 * iy + d_j;
       IKC[i] = heli_p4_kalman_kf_r2020b_P.Qd[i] + smax;
     }
   }
 
   /* '<S11>:1:11' */
-  for (ri = 0; ri < 6; ri++) {
-    for (jA = 0; jA < 6; jA++) {
-      i = 6 * ri + jA;
-      heli_p4_kalman_kf_r2020b_B.P_bar_next[i] = (IKC[i] + IKC[6 * jA + ri]) *
+  for (d_j = 0; d_j < 6; d_j++) {
+    for (iy = 0; iy < 6; iy++) {
+      i = 6 * d_j + iy;
+      heli_p4_kalman_kf_r2020b_B.P_bar_next[i] = (IKC[i] + IKC[6 * iy + d_j]) *
         0.5;
     }
   }
@@ -1447,10 +1455,6 @@ void heli_p4_kalman_kf_r2020b_update0(void) /* Sample time: [0.0s, 0.0s] */
 {
   int32_T i;
   if (rtmIsMajorTimeStep(heli_p4_kalman_kf_r2020b_M)) {
-    /* Update for Memory: '<S9>/Memory' */
-    memcpy(&heli_p4_kalman_kf_r2020b_DW.Memory_PreviousInput[0],
-           &heli_p4_kalman_kf_r2020b_B.Switch[0], 10U * sizeof(real_T));
-
     /* Update for UnitDelay: '<S5>/Unit Delay' */
     for (i = 0; i < 6; i++) {
       heli_p4_kalman_kf_r2020b_DW.UnitDelay_DSTATE[i] =
@@ -1462,6 +1466,10 @@ void heli_p4_kalman_kf_r2020b_update0(void) /* Sample time: [0.0s, 0.0s] */
     /* Update for UnitDelay: '<S5>/Unit Delay1' */
     memcpy(&heli_p4_kalman_kf_r2020b_DW.UnitDelay1_DSTATE[0],
            &heli_p4_kalman_kf_r2020b_B.P_bar_next[0], 36U * sizeof(real_T));
+
+    /* Update for Memory: '<S9>/Memory' */
+    memcpy(&heli_p4_kalman_kf_r2020b_DW.Memory_PreviousInput[0],
+           &heli_p4_kalman_kf_r2020b_B.Switch[0], 10U * sizeof(real_T));
   }
 
   if (rtmIsMajorTimeStep(heli_p4_kalman_kf_r2020b_M)) {
@@ -9758,20 +9766,6 @@ void heli_p4_kalman_kf_r2020b_initialize(void)
   {
     int32_T i;
 
-    /* InitializeConditions for TransferFcn: '<S2>/Travel: Transfer Fcn' */
-    heli_p4_kalman_kf_r2020b_X.TravelTransferFcn_CSTATE = 0.0;
-
-    /* InitializeConditions for TransferFcn: '<S2>/Pitch: Transfer Fcn' */
-    heli_p4_kalman_kf_r2020b_X.PitchTransferFcn_CSTATE = 0.0;
-
-    /* InitializeConditions for TransferFcn: '<S2>/Elevation: Transfer Fcn' */
-    heli_p4_kalman_kf_r2020b_X.ElevationTransferFcn_CSTATE = 0.0;
-
-    /* InitializeConditions for Memory: '<S9>/Memory' */
-    memcpy(&heli_p4_kalman_kf_r2020b_DW.Memory_PreviousInput[0],
-           &heli_p4_kalman_kf_r2020b_P.Memory_InitialCondition[0], 10U * sizeof
-           (real_T));
-
     /* InitializeConditions for UnitDelay: '<S5>/Unit Delay' */
     for (i = 0; i < 6; i++) {
       heli_p4_kalman_kf_r2020b_DW.UnitDelay_DSTATE[i] =
@@ -9783,6 +9777,20 @@ void heli_p4_kalman_kf_r2020b_initialize(void)
     /* InitializeConditions for UnitDelay: '<S5>/Unit Delay1' */
     memcpy(&heli_p4_kalman_kf_r2020b_DW.UnitDelay1_DSTATE[0],
            &heli_p4_kalman_kf_r2020b_P.P0[0], 36U * sizeof(real_T));
+
+    /* InitializeConditions for Memory: '<S9>/Memory' */
+    memcpy(&heli_p4_kalman_kf_r2020b_DW.Memory_PreviousInput[0],
+           &heli_p4_kalman_kf_r2020b_P.Memory_InitialCondition[0], 10U * sizeof
+           (real_T));
+
+    /* InitializeConditions for TransferFcn: '<S2>/Travel: Transfer Fcn' */
+    heli_p4_kalman_kf_r2020b_X.TravelTransferFcn_CSTATE = 0.0;
+
+    /* InitializeConditions for TransferFcn: '<S2>/Pitch: Transfer Fcn' */
+    heli_p4_kalman_kf_r2020b_X.PitchTransferFcn_CSTATE = 0.0;
+
+    /* InitializeConditions for TransferFcn: '<S2>/Elevation: Transfer Fcn' */
+    heli_p4_kalman_kf_r2020b_X.ElevationTransferFcn_CSTATE = 0.0;
 
     /* InitializeConditions for RateTransition: '<S4>/Rate Transition: x' */
     heli_p4_kalman_kf_r2020b_DW.RateTransitionx_Buffer0 =
@@ -10147,10 +10155,10 @@ RT_MODEL_heli_p4_kalman_kf_r2_T *heli_p4_kalman_kf_r2020b(void)
   heli_p4_kalman_kf_r2020b_M->Timing.stepSize2 = 0.01;
 
   /* External mode info */
-  heli_p4_kalman_kf_r2020b_M->Sizes.checksums[0] = (3609982127U);
-  heli_p4_kalman_kf_r2020b_M->Sizes.checksums[1] = (2178774664U);
-  heli_p4_kalman_kf_r2020b_M->Sizes.checksums[2] = (3579754462U);
-  heli_p4_kalman_kf_r2020b_M->Sizes.checksums[3] = (592239552U);
+  heli_p4_kalman_kf_r2020b_M->Sizes.checksums[0] = (2667039178U);
+  heli_p4_kalman_kf_r2020b_M->Sizes.checksums[1] = (1993575563U);
+  heli_p4_kalman_kf_r2020b_M->Sizes.checksums[2] = (1942747540U);
+  heli_p4_kalman_kf_r2020b_M->Sizes.checksums[3] = (2897913031U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
@@ -10218,19 +10226,19 @@ RT_MODEL_heli_p4_kalman_kf_r2_T *heli_p4_kalman_kf_r2020b(void)
       heli_p4_kalman_kf_r2020b_B.P_diag[i] = 0.0;
     }
 
+    heli_p4_kalman_kf_r2020b_B.Gain2[0] = 0.0;
+    heli_p4_kalman_kf_r2020b_B.Gain2[1] = 0.0;
+    heli_p4_kalman_kf_r2020b_B.Gain2[2] = 0.0;
+    heli_p4_kalman_kf_r2020b_B.Gain1[0] = 0.0;
+    heli_p4_kalman_kf_r2020b_B.Gain1[1] = 0.0;
+    heli_p4_kalman_kf_r2020b_B.Gain1[2] = 0.0;
+    heli_p4_kalman_kf_r2020b_B.ManualSwitch = 0.0;
     heli_p4_kalman_kf_r2020b_B.TravelCounttorad = 0.0;
     heli_p4_kalman_kf_r2020b_B.TravelTransferFcn = 0.0;
     heli_p4_kalman_kf_r2020b_B.PitchCounttorad = 0.0;
     heli_p4_kalman_kf_r2020b_B.PitchTransferFcn = 0.0;
     heli_p4_kalman_kf_r2020b_B.ElevationCounttorad = 0.0;
     heli_p4_kalman_kf_r2020b_B.ElevationTransferFcn = 0.0;
-    heli_p4_kalman_kf_r2020b_B.Gain1[0] = 0.0;
-    heli_p4_kalman_kf_r2020b_B.Gain1[1] = 0.0;
-    heli_p4_kalman_kf_r2020b_B.Gain1[2] = 0.0;
-    heli_p4_kalman_kf_r2020b_B.Gain2[0] = 0.0;
-    heli_p4_kalman_kf_r2020b_B.Gain2[1] = 0.0;
-    heli_p4_kalman_kf_r2020b_B.Gain2[2] = 0.0;
-    heli_p4_kalman_kf_r2020b_B.ManualSwitch = 0.0;
     heli_p4_kalman_kf_r2020b_B.FromWorkspace[0] = 0.0;
     heli_p4_kalman_kf_r2020b_B.FromWorkspace[1] = 0.0;
     heli_p4_kalman_kf_r2020b_B.RateTransitionx = 0.0;
@@ -10247,6 +10255,7 @@ RT_MODEL_heli_p4_kalman_kf_r2_T *heli_p4_kalman_kf_r2020b(void)
     heli_p4_kalman_kf_r2020b_B.u[0] = 0.0;
     heli_p4_kalman_kf_r2020b_B.u[1] = 0.0;
     heli_p4_kalman_kf_r2020b_B.Sum = 0.0;
+    heli_p4_kalman_kf_r2020b_B.Sum1 = 0.0;
     heli_p4_kalman_kf_r2020b_B.FrontmotorSaturation = 0.0;
     heli_p4_kalman_kf_r2020b_B.BackmotorSaturation = 0.0;
     heli_p4_kalman_kf_r2020b_B.edotcedot = 0.0;
@@ -10384,9 +10393,9 @@ RT_MODEL_heli_p4_kalman_kf_r2_T *heli_p4_kalman_kf_r2020b(void)
   heli_p4_kalman_kf_r2020b_M->Sizes.numU = (0);/* Number of model inputs */
   heli_p4_kalman_kf_r2020b_M->Sizes.sysDirFeedThru = (0);/* The model is not direct feedthrough */
   heli_p4_kalman_kf_r2020b_M->Sizes.numSampTimes = (3);/* Number of sample times */
-  heli_p4_kalman_kf_r2020b_M->Sizes.numBlocks = (95);/* Number of blocks */
-  heli_p4_kalman_kf_r2020b_M->Sizes.numBlockIO = (36);/* Number of block outputs */
-  heli_p4_kalman_kf_r2020b_M->Sizes.numBlockPrms = (632);/* Sum of parameter "widths" */
+  heli_p4_kalman_kf_r2020b_M->Sizes.numBlocks = (98);/* Number of blocks */
+  heli_p4_kalman_kf_r2020b_M->Sizes.numBlockIO = (37);/* Number of block outputs */
+  heli_p4_kalman_kf_r2020b_M->Sizes.numBlockPrms = (633);/* Sum of parameter "widths" */
   return heli_p4_kalman_kf_r2020b_M;
 }
 

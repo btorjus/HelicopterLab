@@ -7,9 +7,9 @@
  *
  * Code generation for model "heli_p4_kalman_kf_r2020b".
  *
- * Model version              : 11.0
+ * Model version              : 11.5
  * Simulink Coder version : 9.4 (R2020b) 29-Jul-2020
- * C source code generated on : Wed Nov  4 16:27:22 2026
+ * C source code generated on : Mon Nov  9 15:11:17 2026
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -85,20 +85,25 @@ P_heli_p4_kalman_kf_r2020b_T heli_p4_kalman_kf_r2020b_P = {
   /* Variable: Rd
    * Referenced by: '<S5>/MATLAB Function1'
    */
-  { 0.0013151179246330895, 0.0016509956141668824, 0.0023920621970786897,
-    -0.00070755699243577757, -6.436521065506003E-5, 0.0016509956141668824,
-    0.011471533393353304, 0.015753643969273562, -0.001451087781154865,
-    -0.00032074638743253187, 0.0023920621970786897, 0.015753643969273562,
+  { 0.0013151179246330895, 0.0016509956141668822, 0.0023920621970786897,
+    -0.00070755699243577757, -6.436521065506003E-5, 0.0016509956141668822,
+    0.011471533393353307, 0.015753643969273562, -0.0014510877811548647,
+    -0.000320746387432532, 0.0023920621970786897, 0.015753643969273562,
     0.022658281252989798, -0.0021842404096571377, -0.00044487821115897838,
-    -0.00070755699243577757, -0.001451087781154865, -0.0021842404096571377,
-    0.0021655774374360714, 0.0001732193233736487, -6.436521065506003E-5,
-    -0.00032074638743253187, -0.00044487821115897838, 0.0001732193233736487,
-    0.001897563856957671 },
+    -0.00070755699243577757, -0.0014510877811548647, -0.0021842404096571377,
+    0.0021655774374360714, 0.00017321932337364886, -6.436521065506003E-5,
+    -0.000320746387432532, -0.00044487821115897838, 0.00017321932337364886,
+    0.0018975638569576703 },
 
   /* Variable: Vs0
    * Referenced by: '<Root>/Vs0'
    */
   7.3,
+
+  /* Variable: e_offset
+   * Referenced by: '<Root>/e_offset'
+   */
+  0.39,
 
   /* Variable: x0
    * Referenced by: '<S5>/Unit Delay'
@@ -210,6 +215,31 @@ P_heli_p4_kalman_kf_r2020b_T heli_p4_kalman_kf_r2020b_P = {
    */
   0.0,
 
+  /* Expression: 0
+   * Referenced by: '<S9>/Constant'
+   */
+  0.0,
+
+  /* Expression: 65
+   * Referenced by: '<S9>/Constant1'
+   */
+  65.0,
+
+  /* Expression: [0 0 0 0 0 0 0 0 0 0]
+   * Referenced by: '<S9>/Memory'
+   */
+  { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+
+  /* Expression: [ 0, 0, 1; 0, 1, 0; -1, 0, 0]
+   * Referenced by: '<S9>/Gain2'
+   */
+  { 0.0, 0.0, -1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0 },
+
+  /* Expression: [ 0, 0, 1; 0, 1, 0; -1, 0, 0]
+   * Referenced by: '<S9>/Gain1'
+   */
+  { 0.0, 0.0, -1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0 },
+
   /* Expression: 2*pi/8192
    * Referenced by: '<S2>/Travel: Count to rad'
    */
@@ -269,31 +299,6 @@ P_heli_p4_kalman_kf_r2020b_T heli_p4_kalman_kf_r2020b_P = {
    * Referenced by: '<S2>/Elevation: Transfer Fcn'
    */
   50.0,
-
-  /* Expression: 0
-   * Referenced by: '<S9>/Constant'
-   */
-  0.0,
-
-  /* Expression: 65
-   * Referenced by: '<S9>/Constant1'
-   */
-  65.0,
-
-  /* Expression: [0 0 0 0 0 0 0 0 0 0]
-   * Referenced by: '<S9>/Memory'
-   */
-  { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
-
-  /* Expression: [ 0, 0, 1; 0, 1, 0; -1, 0, 0]
-   * Referenced by: '<S9>/Gain1'
-   */
-  { 0.0, 0.0, -1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0 },
-
-  /* Expression: [ 0, 0, 1; 0, 1, 0; -1, 0, 0]
-   * Referenced by: '<S9>/Gain2'
-   */
-  { 0.0, 0.0, -1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0 },
 
   /* Expression: 0
    * Referenced by: '<S4>/Rate Transition: x'
@@ -712,12 +717,12 @@ P_heli_p4_kalman_kf_r2020b_T heli_p4_kalman_kf_r2020b_P = {
   /* Computed Parameter: Refp_c_CurrentSetting
    * Referenced by: '<Root>/Ref p_c'
    */
-  1U,
+  0U,
 
   /* Computed Parameter: Refedot_c_CurrentSetting
    * Referenced by: '<Root>/Ref edot_c'
    */
-  1U,
+  0U,
 
   /* Computed Parameter: ManualSwitch_CurrentSetting_g
    * Referenced by: '<S6>/Manual Switch'

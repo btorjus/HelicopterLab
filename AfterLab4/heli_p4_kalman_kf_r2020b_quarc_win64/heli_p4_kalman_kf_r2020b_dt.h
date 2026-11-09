@@ -7,9 +7,9 @@
  *
  * Code generation for model "heli_p4_kalman_kf_r2020b".
  *
- * Model version              : 11.0
+ * Model version              : 11.5
  * Simulink Coder version : 9.4 (R2020b) 29-Jul-2020
- * C source code generated on : Wed Nov  4 16:27:22 2026
+ * C source code generated on : Mon Nov  9 15:11:17 2026
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -80,7 +80,7 @@ static const char_T * rtDataTypeNames[] = {
 
 /* data type transitions for block I/O structure */
 static DataTypeTransition rtBTransitions[] = {
-  { (char_T *)(&heli_p4_kalman_kf_r2020b_B.TravelCounttorad), 0, 0, 174 },
+  { (char_T *)(&heli_p4_kalman_kf_r2020b_B.Switch[0]), 0, 0, 175 },
 
   { (char_T *)(&heli_p4_kalman_kf_r2020b_B.StreamCall1_o2), 3, 0, 1 }
   ,
@@ -97,8 +97,8 @@ static DataTypeTransition rtBTransitions[] = {
   { (char_T *)(&heli_p4_kalman_kf_r2020b_DW.HILReadEncoderTimebase_Task), 24, 0,
     1 },
 
-  { (char_T *)(&heli_p4_kalman_kf_r2020b_DW.FromWorkspace_PWORK.TimePtr), 11, 0,
-    35 },
+  { (char_T *)(&heli_p4_kalman_kf_r2020b_DW.P_diag_PWORK.LoggedData), 11, 0, 36
+  },
 
   { (char_T *)(&heli_p4_kalman_kf_r2020b_DW.HILInitialize_ClockModes[0]), 6, 0,
     46 },
@@ -120,7 +120,7 @@ static DataTypeTransitionTable rtBTransTable = {
 
 /* data type transitions for Parameters structure */
 static DataTypeTransition rtPTransitions[] = {
-  { (char_T *)(&heli_p4_kalman_kf_r2020b_P.Ad[0]), 0, 0, 198 },
+  { (char_T *)(&heli_p4_kalman_kf_r2020b_P.Ad[0]), 0, 0, 199 },
 
   { (char_T *)(&heli_p4_kalman_kf_r2020b_P.HILWriteAnalog_channels[0]), 7, 0, 2
   },

@@ -7,9 +7,9 @@
  *
  * Code generation for model "Lab1_MS_Step04".
  *
- * Model version              : 11.12
+ * Model version              : 11.13
  * Simulink Coder version : 9.4 (R2020b) 29-Jul-2020
- * C source code generated on : Wed Sep  2 18:52:47 2026
+ * C source code generated on : Mon Nov  9 14:51:00 2026
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping

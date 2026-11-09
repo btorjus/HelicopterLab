@@ -1,0 +1,8 @@
+heli_p2_lqri.obj
+heli_p2_lqri_data.obj
+heli_p2_lqri_main.obj
+rtGetInf.obj
+rtGetNaN.obj
+rt_nonfinite.obj
+rt_zcfcn.obj
+rt_sim.obj

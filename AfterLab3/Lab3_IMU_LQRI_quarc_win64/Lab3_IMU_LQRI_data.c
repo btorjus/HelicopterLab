@@ -7,9 +7,9 @@
  *
  * Code generation for model "Lab3_IMU_LQRI".
  *
- * Model version              : 11.23
+ * Model version              : 11.27
  * Simulink Coder version : 9.4 (R2020b) 29-Jul-2020
- * C source code generated on : Wed Oct 14 20:36:51 2026
+ * C source code generated on : Mon Nov  9 15:03:03 2026
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -62,16 +62,18 @@ P_Lab3_IMU_LQRI_T Lab3_IMU_LQRI_P = {
   /* Variable: L_obs
    * Referenced by: '<S6>/L'
    */
-  { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3169.8016316661938,
-    93700.321022599019, 120.08809445341366, 3580.9603778918481,
-    16.254999194930306, 0.0, 0.0, 0.0, 0.0, 0.0, 17484.083852081545,
-    343388.89343581721, 0.4266231606098273, 25.859161091824337,
-    179.91190554507125 },
+  { 4.0, 0.0, 0.0, 0.0, 0.61173902876295927, 1.0, 5.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+    5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 6.0, 0.0, 0.0, 0.0, 0.0, 0.0, 6.0 },
 
   /* Variable: Vs0
    * Referenced by: '<Root>/Vs0'
    */
   7.3,
+
+  /* Variable: e_offset
+   * Referenced by: '<Root>/Offset'
+   */
+  0.39,
 
   /* Mask Parameter: HILWriteAnalog_channels
    * Referenced by: '<S2>/HIL Write Analog'
@@ -264,6 +266,46 @@ P_Lab3_IMU_LQRI_T Lab3_IMU_LQRI_P = {
   0.0,
 
   /* Expression: 0
+   * Referenced by: '<S4>/Rate Transition: x'
+   */
+  0.0,
+
+  /* Expression: -0.1
+   * Referenced by: '<S4>/Dead Zone: x'
+   */
+  -0.1,
+
+  /* Expression: 0.1
+   * Referenced by: '<S4>/Dead Zone: x'
+   */
+  0.1,
+
+  /* Expression: 10/9
+   * Referenced by: '<S4>/Gain: x'
+   */
+  1.1111111111111112,
+
+  /* Expression: 0
+   * Referenced by: '<S4>/Rate Transition: y'
+   */
+  0.0,
+
+  /* Expression: -0.1
+   * Referenced by: '<S4>/Dead Zone: y'
+   */
+  -0.1,
+
+  /* Expression: 0.1
+   * Referenced by: '<S4>/Dead Zone: y'
+   */
+  0.1,
+
+  /* Expression: 10/9
+   * Referenced by: '<S4>/Gain: y'
+   */
+  1.1111111111111112,
+
+  /* Expression: 0
    * Referenced by: '<S5>/Integrator'
    */
   0.0,
@@ -303,46 +345,6 @@ P_Lab3_IMU_LQRI_T Lab3_IMU_LQRI_P = {
    */
   { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0,
     0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 },
-
-  /* Expression: 0
-   * Referenced by: '<S4>/Rate Transition: x'
-   */
-  0.0,
-
-  /* Expression: -0.1
-   * Referenced by: '<S4>/Dead Zone: x'
-   */
-  -0.1,
-
-  /* Expression: 0.1
-   * Referenced by: '<S4>/Dead Zone: x'
-   */
-  0.1,
-
-  /* Expression: 10/9
-   * Referenced by: '<S4>/Gain: x'
-   */
-  1.1111111111111112,
-
-  /* Expression: 0
-   * Referenced by: '<S4>/Rate Transition: y'
-   */
-  0.0,
-
-  /* Expression: -0.1
-   * Referenced by: '<S4>/Dead Zone: y'
-   */
-  -0.1,
-
-  /* Expression: 0.1
-   * Referenced by: '<S4>/Dead Zone: y'
-   */
-  0.1,
-
-  /* Expression: 10/9
-   * Referenced by: '<S4>/Gain: y'
-   */
-  1.1111111111111112,
 
   /* Computed Parameter: HILInitialize_CKChannels
    * Referenced by: '<Root>/HIL Initialize'
@@ -675,6 +677,16 @@ P_Lab3_IMU_LQRI_T Lab3_IMU_LQRI_P = {
 
   /* Computed Parameter: StreamCall1_Endian
    * Referenced by: '<S9>/Stream Call1'
+   */
+  1U,
+
+  /* Computed Parameter: Refp_c_CurrentSetting
+   * Referenced by: '<Root>/Ref p_c'
+   */
+  1U,
+
+  /* Computed Parameter: Refedot_c_CurrentSetting
+   * Referenced by: '<Root>/Ref edot_c'
    */
   1U,
 

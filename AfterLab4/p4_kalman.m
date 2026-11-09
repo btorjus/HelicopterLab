@@ -31,7 +31,7 @@
 p4_controller;        % clear; clc; heli_params; -> K, F, A_lqri, B_lqri, ...
 
 %% 1. Settings
-TEST    = 7;          % choose test 0-8 (see above)
+TEST    = 1;          % choose test 0-8 (see above)
 noise_case = 'hover';    % TEST 0 only: 'ground' = motors off in software
                           %              'hover'  = normal controller, hold still
 % IMU port: set in the IMU block URI in Simulink (currently serial://IMU:9),

@@ -1,5 +1,5 @@
--IC:\TTK\Helicopter\AfterLab4
--IC:\TTK\Helicopter\AfterLab4\heli_p4_kalman_kf_r2020b_quarc_win64
+-IC:\TTK\HelicopterLab\AfterLab4
+-IC:\TTK\HelicopterLab\AfterLab4\heli_p4_kalman_kf_r2020b_quarc_win64
 -I"C:\Program Files\MATLAB\R2020b\extern\include"
 -I"C:\Program Files\MATLAB\R2020b\simulink\include"
 -I"C:\Program Files\MATLAB\R2020b\rtw\c\src"

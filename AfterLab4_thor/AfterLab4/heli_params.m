@@ -14,7 +14,7 @@ l_p = 0.175;     % [m]  pitch axis -> motor
 %% ---------- Measured on the rig (Part I, Task 2) ----------
 Vs0      = 7.3;  % [V]   hover voltage at e = 0
 Vd_trim  = 0;    % [V]   front/back mismatch trim (fill in if you used one)
-e_offset = 0;    % [rad] elevation encoder offset (fill in from your Simulink)
+e_offset = heli_e_offset();  % [rad] elevation encoder offset, see utils/heli_e_offset.m (post-processing only, not used in Simulink)
 
 %% ---------- Derived: motor constant ----------
 L2  = g*(m_c*l_c - 2*m_p*l_h);

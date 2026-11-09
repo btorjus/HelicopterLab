@@ -7,9 +7,9 @@
  *
  * Code generation for model "Lab3_IMU_LQRI".
  *
- * Model version              : 11.23
+ * Model version              : 11.27
  * Simulink Coder version : 9.4 (R2020b) 29-Jul-2020
- * C source code generated on : Wed Oct 14 20:36:51 2026
+ * C source code generated on : Mon Nov  9 15:03:03 2026
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -602,17 +602,99 @@ void Lab3_IMU_LQRI_output0(void)       /* Sample time: [0.0s, 0.0s] */
       }
     }
 
-    /* Gain: '<S5>/Multiply' */
+    /* RateTransition: '<S4>/Rate Transition: x' */
+    if (Lab3_IMU_LQRI_M->Timing.RateInteraction.TID1_2) {
+      /* RateTransition: '<S4>/Rate Transition: x' */
+      Lab3_IMU_LQRI_B.RateTransitionx = Lab3_IMU_LQRI_DW.RateTransitionx_Buffer0;
+    }
+
+    /* End of RateTransition: '<S4>/Rate Transition: x' */
+
+    /* DeadZone: '<S4>/Dead Zone: x' */
+    if (Lab3_IMU_LQRI_B.RateTransitionx > Lab3_IMU_LQRI_P.DeadZonex_End) {
+      /* DeadZone: '<S4>/Dead Zone: y' */
+      rtb_DeadZoney = Lab3_IMU_LQRI_B.RateTransitionx -
+        Lab3_IMU_LQRI_P.DeadZonex_End;
+    } else if (Lab3_IMU_LQRI_B.RateTransitionx >=
+               Lab3_IMU_LQRI_P.DeadZonex_Start) {
+      /* DeadZone: '<S4>/Dead Zone: y' */
+      rtb_DeadZoney = 0.0;
+    } else {
+      /* DeadZone: '<S4>/Dead Zone: y' */
+      rtb_DeadZoney = Lab3_IMU_LQRI_B.RateTransitionx -
+        Lab3_IMU_LQRI_P.DeadZonex_Start;
+    }
+
+    /* End of DeadZone: '<S4>/Dead Zone: x' */
+
+    /* Gain: '<S4>/Joystick_gain_x' incorporates:
+     *  Gain: '<S4>/Gain: x'
+     */
+    Lab3_IMU_LQRI_B.Joystick_gain_x = Lab3_IMU_LQRI_P.Gainx_Gain * rtb_DeadZoney
+      * Lab3_IMU_LQRI_P.Joystick_gain_x;
+
+    /* ManualSwitch: '<Root>/Ref p_c' */
+    if (Lab3_IMU_LQRI_P.Refp_c_CurrentSetting == 1) {
+      /* ManualSwitch: '<Root>/Ref p_c' */
+      Lab3_IMU_LQRI_B.Refp_c = Lab3_IMU_LQRI_B.FromWorkspace[0];
+    } else {
+      /* ManualSwitch: '<Root>/Ref p_c' */
+      Lab3_IMU_LQRI_B.Refp_c = Lab3_IMU_LQRI_B.Joystick_gain_x;
+    }
+
+    /* End of ManualSwitch: '<Root>/Ref p_c' */
+
+    /* RateTransition: '<S4>/Rate Transition: y' */
+    if (Lab3_IMU_LQRI_M->Timing.RateInteraction.TID1_2) {
+      /* RateTransition: '<S4>/Rate Transition: y' */
+      Lab3_IMU_LQRI_B.RateTransitiony = Lab3_IMU_LQRI_DW.RateTransitiony_Buffer0;
+    }
+
+    /* End of RateTransition: '<S4>/Rate Transition: y' */
+
+    /* DeadZone: '<S4>/Dead Zone: y' */
+    if (Lab3_IMU_LQRI_B.RateTransitiony > Lab3_IMU_LQRI_P.DeadZoney_End) {
+      /* DeadZone: '<S4>/Dead Zone: y' */
+      rtb_DeadZoney = Lab3_IMU_LQRI_B.RateTransitiony -
+        Lab3_IMU_LQRI_P.DeadZoney_End;
+    } else if (Lab3_IMU_LQRI_B.RateTransitiony >=
+               Lab3_IMU_LQRI_P.DeadZoney_Start) {
+      /* DeadZone: '<S4>/Dead Zone: y' */
+      rtb_DeadZoney = 0.0;
+    } else {
+      /* DeadZone: '<S4>/Dead Zone: y' */
+      rtb_DeadZoney = Lab3_IMU_LQRI_B.RateTransitiony -
+        Lab3_IMU_LQRI_P.DeadZoney_Start;
+    }
+
+    /* End of DeadZone: '<S4>/Dead Zone: y' */
+
+    /* Gain: '<S4>/Joystick_gain_y' incorporates:
+     *  Gain: '<S4>/Gain: y'
+     */
+    Lab3_IMU_LQRI_B.Joystick_gain_y = Lab3_IMU_LQRI_P.Gainy_Gain * rtb_DeadZoney
+      * Lab3_IMU_LQRI_P.Joystick_gain_y;
+
+    /* ManualSwitch: '<Root>/Ref edot_c' */
+    if (Lab3_IMU_LQRI_P.Refedot_c_CurrentSetting == 1) {
+      /* ManualSwitch: '<Root>/Ref edot_c' */
+      Lab3_IMU_LQRI_B.Refedot_c = Lab3_IMU_LQRI_B.FromWorkspace[1];
+    } else {
+      /* ManualSwitch: '<Root>/Ref edot_c' */
+      Lab3_IMU_LQRI_B.Refedot_c = Lab3_IMU_LQRI_B.Joystick_gain_y;
+    }
+
+    /* End of ManualSwitch: '<Root>/Ref edot_c' */
+
+    /* Gain: '<S5>/Multiply' incorporates:
+     *  SignalConversion generated from: '<S5>/Multiply'
+     */
     Lab3_IMU_LQRI_B.Fr[0] = 0.0;
-    Lab3_IMU_LQRI_B.Fr[0] += Lab3_IMU_LQRI_P.F[0] *
-      Lab3_IMU_LQRI_B.FromWorkspace[0];
-    Lab3_IMU_LQRI_B.Fr[0] += Lab3_IMU_LQRI_P.F[2] *
-      Lab3_IMU_LQRI_B.FromWorkspace[1];
+    Lab3_IMU_LQRI_B.Fr[0] += Lab3_IMU_LQRI_P.F[0] * Lab3_IMU_LQRI_B.Refp_c;
+    Lab3_IMU_LQRI_B.Fr[0] += Lab3_IMU_LQRI_P.F[2] * Lab3_IMU_LQRI_B.Refedot_c;
     Lab3_IMU_LQRI_B.Fr[1] = 0.0;
-    Lab3_IMU_LQRI_B.Fr[1] += Lab3_IMU_LQRI_P.F[1] *
-      Lab3_IMU_LQRI_B.FromWorkspace[0];
-    Lab3_IMU_LQRI_B.Fr[1] += Lab3_IMU_LQRI_P.F[3] *
-      Lab3_IMU_LQRI_B.FromWorkspace[1];
+    Lab3_IMU_LQRI_B.Fr[1] += Lab3_IMU_LQRI_P.F[1] * Lab3_IMU_LQRI_B.Refp_c;
+    Lab3_IMU_LQRI_B.Fr[1] += Lab3_IMU_LQRI_P.F[3] * Lab3_IMU_LQRI_B.Refedot_c;
 
     /* ManualSwitch: '<S5>/Manual Switch' */
     if (Lab3_IMU_LQRI_P.ManualSwitch_CurrentSetting == 1) {
@@ -782,6 +864,12 @@ void Lab3_IMU_LQRI_output0(void)       /* Sample time: [0.0s, 0.0s] */
         }
       }
     }
+
+    /* Sum: '<Root>/Sum1' incorporates:
+     *  Constant: '<Root>/Offset'
+     */
+    Lab3_IMU_LQRI_B.Sum1 = Lab3_IMU_LQRI_B.ElevationCounttorad -
+      Lab3_IMU_LQRI_P.e_offset;
   }
 
   /* Gain: '<S1>/Front gain' incorporates:
@@ -860,10 +948,10 @@ void Lab3_IMU_LQRI_output0(void)       /* Sample time: [0.0s, 0.0s] */
     }
 
     /* SignalConversion generated from: '<S5>/p2Run' */
-    rtb_TmpSignalConversionAtp2RunI[0] = Lab3_IMU_LQRI_B.FromWorkspace[0];
+    rtb_TmpSignalConversionAtp2RunI[0] = Lab3_IMU_LQRI_B.Refp_c;
+    rtb_TmpSignalConversionAtp2RunI[1] = Lab3_IMU_LQRI_B.Refedot_c;
     rtb_TmpSignalConversionAtp2RunI[2] = Lab3_IMU_LQRI_B.u[0];
     rtb_TmpSignalConversionAtp2RunI[4] = Lab3_IMU_LQRI_B.Integrator_m[0];
-    rtb_TmpSignalConversionAtp2RunI[1] = Lab3_IMU_LQRI_B.FromWorkspace[1];
     rtb_TmpSignalConversionAtp2RunI[3] = Lab3_IMU_LQRI_B.u[1];
     rtb_TmpSignalConversionAtp2RunI[5] = Lab3_IMU_LQRI_B.Integrator_m[1];
 
@@ -909,10 +997,10 @@ void Lab3_IMU_LQRI_output0(void)       /* Sample time: [0.0s, 0.0s] */
    *  Sum: '<S10>/Sum1'
    *  Sum: '<S10>/Sum2'
    */
-  Lab3_IMU_LQRI_B.TmpSignalConversionAtIntegrator[0] =
-    Lab3_IMU_LQRI_B.FromWorkspace[0] - Lab3_IMU_LQRI_B.Integrator[0];
-  Lab3_IMU_LQRI_B.TmpSignalConversionAtIntegrator[1] =
-    Lab3_IMU_LQRI_B.FromWorkspace[1] - Lab3_IMU_LQRI_B.Integrator[3];
+  Lab3_IMU_LQRI_B.TmpSignalConversionAtIntegrator[0] = Lab3_IMU_LQRI_B.Refp_c -
+    Lab3_IMU_LQRI_B.Integrator[0];
+  Lab3_IMU_LQRI_B.TmpSignalConversionAtIntegrator[1] = Lab3_IMU_LQRI_B.Refedot_c
+    - Lab3_IMU_LQRI_B.Integrator[3];
 
   /* Gain: '<S6>/C_obs' */
   for (i = 0; i < 5; i++) {
@@ -966,72 +1054,8 @@ void Lab3_IMU_LQRI_output0(void)       /* Sample time: [0.0s, 0.0s] */
     /* Sum: '<S6>/Sum1' incorporates:
      *  Gain: '<S6>/A_obs'
      */
-    Lab3_IMU_LQRI_B.Sum1[i] = (tmp_0[i] + tmp[i]) + euler_rates_tmp;
+    Lab3_IMU_LQRI_B.Sum1_p[i] = (tmp_0[i] + tmp[i]) + euler_rates_tmp;
   }
-
-  /* RateTransition: '<S4>/Rate Transition: x' */
-  if (rtmIsMajorTimeStep(Lab3_IMU_LQRI_M)) {
-    if (Lab3_IMU_LQRI_M->Timing.RateInteraction.TID1_2) {
-      /* RateTransition: '<S4>/Rate Transition: x' */
-      Lab3_IMU_LQRI_B.RateTransitionx = Lab3_IMU_LQRI_DW.RateTransitionx_Buffer0;
-    }
-
-    /* DeadZone: '<S4>/Dead Zone: x' */
-    if (Lab3_IMU_LQRI_B.RateTransitionx > Lab3_IMU_LQRI_P.DeadZonex_End) {
-      /* DeadZone: '<S4>/Dead Zone: y' */
-      rtb_DeadZoney = Lab3_IMU_LQRI_B.RateTransitionx -
-        Lab3_IMU_LQRI_P.DeadZonex_End;
-    } else if (Lab3_IMU_LQRI_B.RateTransitionx >=
-               Lab3_IMU_LQRI_P.DeadZonex_Start) {
-      /* DeadZone: '<S4>/Dead Zone: y' */
-      rtb_DeadZoney = 0.0;
-    } else {
-      /* DeadZone: '<S4>/Dead Zone: y' */
-      rtb_DeadZoney = Lab3_IMU_LQRI_B.RateTransitionx -
-        Lab3_IMU_LQRI_P.DeadZonex_Start;
-    }
-
-    /* End of DeadZone: '<S4>/Dead Zone: x' */
-
-    /* Gain: '<S4>/Joystick_gain_x' incorporates:
-     *  Gain: '<S4>/Gain: x'
-     */
-    Lab3_IMU_LQRI_B.Joystick_gain_x = Lab3_IMU_LQRI_P.Gainx_Gain * rtb_DeadZoney
-      * Lab3_IMU_LQRI_P.Joystick_gain_x;
-
-    /* RateTransition: '<S4>/Rate Transition: y' */
-    if (Lab3_IMU_LQRI_M->Timing.RateInteraction.TID1_2) {
-      /* RateTransition: '<S4>/Rate Transition: y' */
-      Lab3_IMU_LQRI_B.RateTransitiony = Lab3_IMU_LQRI_DW.RateTransitiony_Buffer0;
-    }
-
-    /* End of RateTransition: '<S4>/Rate Transition: y' */
-
-    /* DeadZone: '<S4>/Dead Zone: y' */
-    if (Lab3_IMU_LQRI_B.RateTransitiony > Lab3_IMU_LQRI_P.DeadZoney_End) {
-      /* DeadZone: '<S4>/Dead Zone: y' */
-      rtb_DeadZoney = Lab3_IMU_LQRI_B.RateTransitiony -
-        Lab3_IMU_LQRI_P.DeadZoney_End;
-    } else if (Lab3_IMU_LQRI_B.RateTransitiony >=
-               Lab3_IMU_LQRI_P.DeadZoney_Start) {
-      /* DeadZone: '<S4>/Dead Zone: y' */
-      rtb_DeadZoney = 0.0;
-    } else {
-      /* DeadZone: '<S4>/Dead Zone: y' */
-      rtb_DeadZoney = Lab3_IMU_LQRI_B.RateTransitiony -
-        Lab3_IMU_LQRI_P.DeadZoney_Start;
-    }
-
-    /* End of DeadZone: '<S4>/Dead Zone: y' */
-
-    /* Gain: '<S4>/Joystick_gain_y' incorporates:
-     *  Gain: '<S4>/Gain: y'
-     */
-    Lab3_IMU_LQRI_B.Joystick_gain_y = Lab3_IMU_LQRI_P.Gainy_Gain * rtb_DeadZoney
-      * Lab3_IMU_LQRI_P.Joystick_gain_y;
-  }
-
-  /* End of RateTransition: '<S4>/Rate Transition: x' */
 }
 
 /* Model update function for TID0 */
@@ -1108,7 +1132,7 @@ void Lab3_IMU_LQRI_derivatives(void)
 
   /* Derivatives for Integrator: '<S6>/Integrator' */
   for (i = 0; i < 5; i++) {
-    _rtXdot->Integrator_CSTATE[i] = Lab3_IMU_LQRI_B.Sum1[i];
+    _rtXdot->Integrator_CSTATE[i] = Lab3_IMU_LQRI_B.Sum1_p[i];
   }
 
   /* End of Derivatives for Integrator: '<S6>/Integrator' */
@@ -9214,6 +9238,14 @@ void Lab3_IMU_LQRI_initialize(void)
     Lab3_IMU_LQRI_DW.FromWorkspace_IWORK.PrevIndex = 0;
   }
 
+  /* Start for RateTransition: '<S4>/Rate Transition: x' */
+  Lab3_IMU_LQRI_B.RateTransitionx =
+    Lab3_IMU_LQRI_P.RateTransitionx_InitialConditio;
+
+  /* Start for RateTransition: '<S4>/Rate Transition: y' */
+  Lab3_IMU_LQRI_B.RateTransitiony =
+    Lab3_IMU_LQRI_P.RateTransitiony_InitialConditio;
+
   /* Start for ToFile: '<Root>/To File' */
   {
     FILE *fp = (NULL);
@@ -9253,14 +9285,6 @@ void Lab3_IMU_LQRI_initialize(void)
     Lab3_IMU_LQRI_DW.p2Run_IWORK.Decimation = -1;
     Lab3_IMU_LQRI_DW.p2Run_PWORK.FilePtr = fp;
   }
-
-  /* Start for RateTransition: '<S4>/Rate Transition: x' */
-  Lab3_IMU_LQRI_B.RateTransitionx =
-    Lab3_IMU_LQRI_P.RateTransitionx_InitialConditio;
-
-  /* Start for RateTransition: '<S4>/Rate Transition: y' */
-  Lab3_IMU_LQRI_B.RateTransitiony =
-    Lab3_IMU_LQRI_P.RateTransitiony_InitialConditio;
 
   /* Start for S-Function (game_controller_block): '<S4>/Game Controller' */
 
@@ -9317,10 +9341,6 @@ void Lab3_IMU_LQRI_initialize(void)
 
     /* End of InitializeConditions for Integrator: '<S6>/Integrator' */
 
-    /* InitializeConditions for Integrator: '<S5>/Integrator' */
-    Lab3_IMU_LQRI_X.Integrator_CSTATE_i[0] = Lab3_IMU_LQRI_P.Integrator_IC_c;
-    Lab3_IMU_LQRI_X.Integrator_CSTATE_i[1] = Lab3_IMU_LQRI_P.Integrator_IC_c;
-
     /* InitializeConditions for RateTransition: '<S4>/Rate Transition: x' */
     Lab3_IMU_LQRI_DW.RateTransitionx_Buffer0 =
       Lab3_IMU_LQRI_P.RateTransitionx_InitialConditio;
@@ -9328,6 +9348,10 @@ void Lab3_IMU_LQRI_initialize(void)
     /* InitializeConditions for RateTransition: '<S4>/Rate Transition: y' */
     Lab3_IMU_LQRI_DW.RateTransitiony_Buffer0 =
       Lab3_IMU_LQRI_P.RateTransitiony_InitialConditio;
+
+    /* InitializeConditions for Integrator: '<S5>/Integrator' */
+    Lab3_IMU_LQRI_X.Integrator_CSTATE_i[0] = Lab3_IMU_LQRI_P.Integrator_IC_c;
+    Lab3_IMU_LQRI_X.Integrator_CSTATE_i[1] = Lab3_IMU_LQRI_P.Integrator_IC_c;
   }
 }
 
@@ -9657,10 +9681,10 @@ RT_MODEL_Lab3_IMU_LQRI_T *Lab3_IMU_LQRI(void)
   Lab3_IMU_LQRI_M->Timing.stepSize2 = 0.01;
 
   /* External mode info */
-  Lab3_IMU_LQRI_M->Sizes.checksums[0] = (4051030798U);
-  Lab3_IMU_LQRI_M->Sizes.checksums[1] = (757590525U);
-  Lab3_IMU_LQRI_M->Sizes.checksums[2] = (2546377221U);
-  Lab3_IMU_LQRI_M->Sizes.checksums[3] = (2966019969U);
+  Lab3_IMU_LQRI_M->Sizes.checksums[0] = (3053075096U);
+  Lab3_IMU_LQRI_M->Sizes.checksums[1] = (309926603U);
+  Lab3_IMU_LQRI_M->Sizes.checksums[2] = (3232501935U);
+  Lab3_IMU_LQRI_M->Sizes.checksums[3] = (1567631671U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
@@ -9706,7 +9730,7 @@ RT_MODEL_Lab3_IMU_LQRI_T *Lab3_IMU_LQRI(void)
     }
 
     for (i = 0; i < 5; i++) {
-      Lab3_IMU_LQRI_B.Sum1[i] = 0.0;
+      Lab3_IMU_LQRI_B.Sum1_p[i] = 0.0;
     }
 
     Lab3_IMU_LQRI_B.TravelCounttorad = 0.0;
@@ -9724,6 +9748,12 @@ RT_MODEL_Lab3_IMU_LQRI_T *Lab3_IMU_LQRI(void)
     Lab3_IMU_LQRI_B.DataTypeConversion = 0.0;
     Lab3_IMU_LQRI_B.FromWorkspace[0] = 0.0;
     Lab3_IMU_LQRI_B.FromWorkspace[1] = 0.0;
+    Lab3_IMU_LQRI_B.RateTransitionx = 0.0;
+    Lab3_IMU_LQRI_B.Joystick_gain_x = 0.0;
+    Lab3_IMU_LQRI_B.Refp_c = 0.0;
+    Lab3_IMU_LQRI_B.RateTransitiony = 0.0;
+    Lab3_IMU_LQRI_B.Joystick_gain_y = 0.0;
+    Lab3_IMU_LQRI_B.Refedot_c = 0.0;
     Lab3_IMU_LQRI_B.Fr[0] = 0.0;
     Lab3_IMU_LQRI_B.Fr[1] = 0.0;
     Lab3_IMU_LQRI_B.ManualSwitch = 0.0;
@@ -9732,14 +9762,11 @@ RT_MODEL_Lab3_IMU_LQRI_T *Lab3_IMU_LQRI(void)
     Lab3_IMU_LQRI_B.u[0] = 0.0;
     Lab3_IMU_LQRI_B.u[1] = 0.0;
     Lab3_IMU_LQRI_B.Sum = 0.0;
+    Lab3_IMU_LQRI_B.Sum1 = 0.0;
     Lab3_IMU_LQRI_B.FrontmotorSaturation = 0.0;
     Lab3_IMU_LQRI_B.BackmotorSaturation = 0.0;
     Lab3_IMU_LQRI_B.TmpSignalConversionAtIntegrator[0] = 0.0;
     Lab3_IMU_LQRI_B.TmpSignalConversionAtIntegrator[1] = 0.0;
-    Lab3_IMU_LQRI_B.RateTransitionx = 0.0;
-    Lab3_IMU_LQRI_B.Joystick_gain_x = 0.0;
-    Lab3_IMU_LQRI_B.RateTransitiony = 0.0;
-    Lab3_IMU_LQRI_B.Joystick_gain_y = 0.0;
     Lab3_IMU_LQRI_B.euler_rates[0] = 0.0;
     Lab3_IMU_LQRI_B.euler_rates[1] = 0.0;
     Lab3_IMU_LQRI_B.euler_rates[2] = 0.0;
@@ -9826,10 +9853,10 @@ RT_MODEL_Lab3_IMU_LQRI_T *Lab3_IMU_LQRI(void)
     }
   }
 
-  Lab3_IMU_LQRI_DW.HILWriteAnalog_Buffer[0] = 0.0;
-  Lab3_IMU_LQRI_DW.HILWriteAnalog_Buffer[1] = 0.0;
   Lab3_IMU_LQRI_DW.RateTransitionx_Buffer0 = 0.0;
   Lab3_IMU_LQRI_DW.RateTransitiony_Buffer0 = 0.0;
+  Lab3_IMU_LQRI_DW.HILWriteAnalog_Buffer[0] = 0.0;
+  Lab3_IMU_LQRI_DW.HILWriteAnalog_Buffer[1] = 0.0;
 
   /* data type transition information */
   {
@@ -9856,9 +9883,9 @@ RT_MODEL_Lab3_IMU_LQRI_T *Lab3_IMU_LQRI(void)
   Lab3_IMU_LQRI_M->Sizes.numU = (0);   /* Number of model inputs */
   Lab3_IMU_LQRI_M->Sizes.sysDirFeedThru = (0);/* The model is not direct feedthrough */
   Lab3_IMU_LQRI_M->Sizes.numSampTimes = (3);/* Number of sample times */
-  Lab3_IMU_LQRI_M->Sizes.numBlocks = (88);/* Number of blocks */
-  Lab3_IMU_LQRI_M->Sizes.numBlockIO = (29);/* Number of block outputs */
-  Lab3_IMU_LQRI_M->Sizes.numBlockPrms = (533);/* Sum of parameter "widths" */
+  Lab3_IMU_LQRI_M->Sizes.numBlocks = (93);/* Number of blocks */
+  Lab3_IMU_LQRI_M->Sizes.numBlockIO = (32);/* Number of block outputs */
+  Lab3_IMU_LQRI_M->Sizes.numBlockPrms = (536);/* Sum of parameter "widths" */
   return Lab3_IMU_LQRI_M;
 }
 

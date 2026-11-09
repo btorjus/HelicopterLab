@@ -27,7 +27,7 @@ lambda_c   = max(abs(real(ctrl_poles)));      % raskeste regulatorpol
 
 %% 1. Innstillinger
 PORT    = 4;          % IMU COM-port (sjekk Device Manager hver labdag)
-TEST    = 8;          % velg test 1-8 (se over)
+TEST    = 3;          % velg test 1-8 (se over)
 use_est = 1;          % 0 = regulator pa enkodere (observator gar parallelt)
                       % 1 = regulator pa estimater
                       % Kan endres under kjoring: sett verdi + Ctrl+D i Simulink

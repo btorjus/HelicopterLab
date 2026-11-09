@@ -20,6 +20,18 @@ for k = 1:numel(names)
     col = last + 1;
 end
 
+% Elevation encoder offset (Part I Task 2.1.2 was never applied in Simulink).
+% enc(:,5) is encoder e; raw value kept in d.e_enc_raw.
+d.e_offset = heli_e_offset();
+if size(d.enc,2) >= 5
+    d.e_enc_raw = d.enc(:,5);
+    % Runs where encoder angles were fed into y (e.g. T2_euler_enc): correct y too
+    if ~isempty(d.y) && max(abs(d.y(:,3) - d.enc(:,5))) < 1e-9
+        d.y(:,3) = d.y(:,3) - d.e_offset;
+    end
+    d.enc(:,5) = d.enc(:,5) - d.e_offset;
+end
+
 p = ['p3_' tag '_params.mat'];
 if isfile(p), d.params = load(p); end
 end

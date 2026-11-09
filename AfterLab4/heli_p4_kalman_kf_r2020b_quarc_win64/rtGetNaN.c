@@ -7,9 +7,9 @@
  *
  * Code generation for model "heli_p4_kalman_kf_r2020b".
  *
- * Model version              : 11.0
+ * Model version              : 11.5
  * Simulink Coder version : 9.4 (R2020b) 29-Jul-2020
- * C source code generated on : Wed Nov  4 16:27:22 2026
+ * C source code generated on : Mon Nov  9 15:11:17 2026
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping

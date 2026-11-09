@@ -7,9 +7,9 @@
  *
  * Code generation for model "heli_p2_lqr".
  *
- * Model version              : 11.10
+ * Model version              : 11.11
  * Simulink Coder version : 9.4 (R2020b) 29-Jul-2020
- * C source code generated on : Wed Sep 23 19:15:53 2026
+ * C source code generated on : Mon Nov  9 14:42:22 2026
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -598,7 +598,7 @@ P_heli_p2_lqr_T heli_p2_lqr_P = {
   /* Computed Parameter: ManualSwitch1_CurrentSetting
    * Referenced by: '<Root>/Manual Switch1'
    */
-  1U,
+  0U,
 
   /* Computed Parameter: GameController_ControllerNumber
    * Referenced by: '<S3>/Game Controller'
