@@ -1,0 +1,92 @@
+% ===================== Part IV - Results =====================
+% Draft. Figures from AfterLab4/p4_report_figs.m (figures/report/*.pdf).
+% Adjust the \includegraphics paths to where the PDFs sit in the Overleaf project.
+% Only observations here - the explanations belong in the Discussion.
+
+\subsection{Results}
+
+\paragraph{Measurement noise.}
+\Cref{fig:p4_noise} compares the IMU elevation measurement with the helicopter lying on the ground and hovering at the linearization point.
+On the ground the noise stays within about $\pm0.2^\circ$, while in hover it oscillates with an amplitude of about $15^\circ$.
+The same holds for all five measurements: the standard deviation is between about 25 and 125 times larger in hover, which is roughly three to four orders of magnitude in variance.
+The spectrum in the right panel shows that the hover noise is concentrated in a peak around $60\,\mathrm{Hz}$, with smaller peaks at higher frequencies, while the ground noise has no such peak.
+The hover covariance also has a strong correlation between $\dot{p}$ and $e$ (correlation coefficient $0.98$), which is absent on the ground.
+The hover covariance is used as $R_d$ in all following tests.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/p4_noise.pdf}
+    \caption{IMU elevation measurement on the ground and in hover. Left and middle: \SI{1}{s} of the measurement with the mean removed, note the different $y$-axes. Right: power spectral density over \SIrange{10}{40}{s} of the same runs.}
+    \label{fig:p4_noise}
+\end{figure}
+
+\paragraph{$Q_d = 0$.}
+\Cref{fig:p4_qd_zero} shows the run where the filter was started with $Q_d = 0$.
+The diagonal of $\hat{P}$ decreases throughout the run, and at $t = 19\,\mathrm{s}$ $\hat{P}_{pp}$ is almost three orders of magnitude below the baseline value.
+Up to about $t = 5\,\mathrm{s}$ the estimate follows the encoder.
+After that the estimate $\hat{p}$ stays much closer to the reference than the encoder does, while the encoder pitch oscillates with growing amplitude and reaches about $100^\circ$ at $t \approx 17\,\mathrm{s}$.
+The run was stopped at $t = 19\,\mathrm{s}$.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/p4_qd_zero.pdf}
+    \caption{$Q_d = 0$. Top: pitch from the IMU, the encoder and the Kalman estimate that is fed to the controller. Bottom: diagonal elements of $\hat{P}$, compared with the baseline run.}
+    \label{fig:p4_qd_zero}
+\end{figure}
+
+\paragraph{$Q_d \to \infty$.}
+\Cref{fig:p4_qd_inf} compares $Q_d = 10^6 I$ with the baseline over the two pitch steps.
+The pitch that is flown (top panel) is almost the same in the two runs.
+The estimate $\hat{p}$ (middle panel) is equal to the IMU measurement whenever new data arrives, so it carries the full measurement noise.
+This noise is largest while the helicopter holds $p_c = -17^\circ$ between $t = 13$ and $18\,\mathrm{s}$.
+The same noise appears in $V_d$ (bottom panel), where the standard deviation is about three to four times larger than in the baseline.
+The logged $\hat{P}$ for the five measured states settles at exactly the diagonal of $R_d$.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/p4_qd_inf.pdf}
+    \caption{$Q_d \to \infty$ compared with the baseline over the two pitch steps. Top: pitch measured by the encoder. Middle: pitch estimate. Bottom: differential voltage $V_d$.}
+    \label{fig:p4_qd_inf}
+\end{figure}
+
+\paragraph{Distribution of $Q_d$.}
+\Cref{fig:p4_qd_split} compares the baseline with a high $q$ on the rates and a high $q$ on the angles.
+With high $q$ on the rates, the pitch response and the error in $\hat{p}$ are close to the baseline, while the error in $\hat{\dot{p}}$ is a wider noise band than in the baseline.
+With high $q$ on the angles, the pitch oscillates after each step and undershoots to about $-32^\circ$ after the step at $t = 13\,\mathrm{s}$.
+In this run the error in $\hat{p}$ is a noise band of up to about $\pm10^\circ$, and $\hat{\dot{p}}$ is smaller than the encoder rate, which shows up as the slow oscillation in the bottom panel.
+Of the three runs, the baseline has the smallest estimation error in both $\hat{p}$ and $\hat{\dot{p}}$.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/p4_qd_split.pdf}
+    \caption{Baseline, high $q$ on the rates and high $q$ on the angles. Top: pitch measured by the encoder. Middle and bottom: estimation error in $\hat{p}$ and $\hat{\dot{p}}$, relative to the encoder.}
+    \label{fig:p4_qd_split}
+\end{figure}
+
+\paragraph{Disconnecting new data.}
+In \cref{fig:p4_newdata} the new-data signal was disconnected twice during flight (shaded areas).
+In both intervals the estimate $\hat{p}$ stays near $0^\circ$, while the encoder pitch moves away and reaches $36^\circ$ and $23^\circ$.
+At the same time the plotted diagonal elements of $\hat{P}$ grow, from about $10^{-4}$ up to between $10^{-2}$ and $10^{-1}$.
+When the signal is reconnected, $\hat{p}$ jumps to the encoder value, and $\hat{P}$ falls back to its previous level within about $0.05\,\mathrm{s}$.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/p4_newdata.pdf}
+    \caption{New-data signal disconnected twice during flight (shaded). Top: pitch reference, encoder and estimate. Bottom: selected diagonal elements of $\hat{P}$.}
+    \label{fig:p4_newdata}
+\end{figure}
+
+\paragraph{Kalman filter and Luenberger observer.}
+\Cref{fig:p4_vs_luenberger} compares the Kalman filter with baseline $Q_d$ and the Luenberger observer from Part III, flown with the same controller and reference profile.
+The pitch responses lie on top of each other through the whole profile.
+The estimation errors in $\hat{p}$ and $\hat{e}$ follow the same slow pattern for both estimators, but the Kalman error has more high-frequency noise on top.
+The RMS error in $\hat{p}$ is the same for the two ($0.5^\circ$), while the RMS error in $\hat{\dot{p}}$ is lower for the Kalman filter ($3.0$ against $4.4\,\mathrm{deg/s}$).
+
+A run with $Q_d$ computed by Van Loan's method, with the same intensity as the baseline, gave nearly the same RMS estimation error as the baseline for all states, and is therefore not plotted.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/p4_vs_luenberger.pdf}
+    \caption{Kalman filter (baseline $Q_d$) and Luenberger observer (Part III) with the same controller and reference. Top: pitch measured by the encoder. Middle and bottom: estimation error in $\hat{p}$ and $\hat{e}$, relative to the encoder.}
+    \label{fig:p4_vs_luenberger}
+\end{figure}

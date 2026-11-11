@@ -18,19 +18,19 @@ S.lw          = 1.5;         % measured lines
 S.lw_model    = 1.5;         % model lines (dotted)
 S.lw_ref      = 1.5;         % reference lines (dashed)
 S.lw_input    = 1.5;         % input voltages
-S.axis_lw     = 0.8;         % axis line width
+S.axis_lw     = 0.6;         % axis line width
 S.tickdir     = 'in';        % 'in' | 'out'
-S.grid        = false;       % true | false
+S.grid        = true;       % true | false
 S.legend_loc  = 'best';      % 'best', 'southeast', 'northeast', ...
 S.legend_cols = 3;           % legend columns
 S.outdir      = fullfile('figures', 'report');
 S.formats     = {'pdf', 'png'};
-S.smooth_elev = 0.3;         % [s] centered moving average on e_dot and Vs~ in Fig. 2 (0 = raw)
+S.smooth_elev = 0.1;         % [s] centered moving average on e_dot and all input voltages (0 = raw)
                              %     (encoder quantization makes the raw rate signal pure spikes)
 
-% Colours (Zissou palette, light blue replaced by dark maroon for contrast)
+% Colours (Zissou teal, red, ochre + purple as 4th colour)
 C.teal  = '#3B9AB2';   C.red  = '#F21A00';   C.ochre = '#E1AF00';
-C.light = '#5B1A18';   C.ref  = '#000000';   C.grey  = '#8A8A85';
+C.light = '#7B4FA0';   C.ref  = '#000000';   C.grey  = '#8A8A85';
 
 
 %% ======================= DATA =======================
@@ -72,14 +72,14 @@ G_i0  = tf(K1*[0,       -Ki(2,4)], den_i);
 tm = 0:0.01:10;
 ax = new_report_fig(2, [2 1]);
 report_line(ax(1), ts(Base),  deg(Base.p),  C.teal,  'meas',  'Baseline',   S);
-report_line(ax(1), ts(Aggr),  deg(Aggr.p),  C.red,   'meas',  'Aggressive', S);
-report_line(ax(1), ts(Slug),  deg(Slug.p),  C.ochre, 'meas',  'Sluggish',   S);
-report_line(ax(1), ts(Cheap), deg(Cheap.p), C.light, 'meas2', 'CheapVd',    S);
+report_line(ax(1), ts(Aggr),  deg(Aggr.p),  C.red,   'meas',  '$10Q$', S);
+report_line(ax(1), ts(Slug),  deg(Slug.p),  C.ochre, 'meas',  '$10R$', S);
+report_line(ax(1), ts(Cheap), deg(Cheap.p), C.light, 'meas2', '$0.1\,r_{V_d}$', S);
 report_line(ax(1), tm, deg(pc*step(G_pitch, tm)), C.teal, 'model', 'Baseline model', S);
 report_line(ax(1), [-1 0 0 10], deg([0 0 pc pc]), C.ref, 'ref', 'Reference $p_c$', S);
-report_line(ax(2), ts(Base), Base.Vd, C.teal,  'input', '', S);
-report_line(ax(2), ts(Aggr), Aggr.Vd, C.red,   'input', '', S);
-report_line(ax(2), ts(Slug), Slug.Vd, C.ochre, 'input', '', S);
+report_line(ax(2), ts(Base), sm(Base.Vd), C.teal,  'input', '', S);
+report_line(ax(2), ts(Aggr), sm(Aggr.Vd), C.red,   'input', '', S);
+report_line(ax(2), ts(Slug), sm(Slug.Vd), C.ochre, 'input', '', S);
 finish_report_fig(ax, S, 'time since pitch step $t$ (s)', {'pitch $p$ (deg)', '$V_d$ (V)'}, ...
                   [-1 10], {[-1 20], []}, 'p2_pitch_qr');
 
@@ -87,13 +87,13 @@ finish_report_fig(ax, S, 'time since pitch step $t$ (s)', {'pitch $p$ (deg)', '$
 tm = 0:0.01:10;
 ax = new_report_fig(2, [2 1]);
 report_line(ax(1), ts(Base), deg(Base.p), C.teal, 'meas', 'Baseline',  S);
-report_line(ax(1), ts(Prio), deg(Prio.p), C.red,  'meas', 'PitchPrio', S);
-report_line(ax(1), ts(Damp), deg(Damp.p), C.ochre,'meas', 'PitchDamp', S);
+report_line(ax(1), ts(Prio), deg(Prio.p), C.red,  'meas', '$10\,q_p$', S);
+report_line(ax(1), ts(Damp), deg(Damp.p), C.ochre,'meas', '$10\,q_{\dot{p}}$', S);
 report_line(ax(1), tm, deg(pc*step(G_pitch, tm)), C.teal, 'model', 'Baseline model', S);
 report_line(ax(1), [-1 0 0 10], deg([0 0 pc pc]), C.ref, 'ref', 'Reference $p_c$', S);
-report_line(ax(2), ts(Base), Base.Vd, C.teal,  'input', '', S);
-report_line(ax(2), ts(Prio), Prio.Vd, C.red,   'input', '', S);
-report_line(ax(2), ts(Damp), Damp.Vd, C.ochre, 'input', '', S);
+report_line(ax(2), ts(Base), sm(Base.Vd), C.teal,  'input', '', S);
+report_line(ax(2), ts(Prio), sm(Prio.Vd), C.red,   'input', '', S);
+report_line(ax(2), ts(Damp), sm(Damp.Vd), C.ochre, 'input', '', S);
 finish_report_fig(ax, S, 'time since pitch step $t$ (s)', {'pitch $p$ (deg)', '$V_d$ (V)'}, ...
                   [-1 10], {[-1 20], []}, 'p2_pitch_weights');
 
@@ -104,9 +104,9 @@ w  = BaseE.t >= t0 - 1 & BaseE.t <= t0 + 7;
 tw = BaseE.t(w) - t0;
 ax = new_report_fig(2, [2 1]);
 report_line(ax(1), BaseE.t - t0, deg(sm(BaseE.e_rate)), C.teal,  'meas',  'Baseline',   S);
-report_line(ax(1), AggrE.t - t0, deg(sm(AggrE.e_rate)), C.red,   'meas',  'Aggressive', S);
-report_line(ax(1), SlugE.t - t0, deg(sm(SlugE.e_rate)), C.ochre, 'meas',  'Sluggish',   S);
-report_line(ax(1), IBasE.t - t0, deg(sm(IBasE.e_rate)), C.light, 'meas2', 'IBaseline',  S);
+report_line(ax(1), AggrE.t - t0, deg(sm(AggrE.e_rate)), C.red,   'meas',  '$10Q$', S);
+report_line(ax(1), SlugE.t - t0, deg(sm(SlugE.e_rate)), C.ochre, 'meas',  '$10R$', S);
+report_line(ax(1), IBasE.t - t0, deg(sm(IBasE.e_rate)), C.light, 'meas2', '$q_I = 1$', S);
 report_line(ax(1), tw, deg(lsim(G_elev, BaseE.edot_c(w)', tw - tw(1))), C.teal, 'model', 'Baseline model', S);
 report_line(ax(1), tw, deg(BaseE.edot_c(w)), C.ref, 'ref', 'Reference $\dot{e}_c$', S);
 report_line(ax(2), BaseE.t - t0, sm(BaseE.Vs_til), C.teal,  'input', '', S);
@@ -118,15 +118,15 @@ finish_report_fig(ax, S, 'time since start of pulse $t$ (s)', ...
 
 %% ======================= FIGURE 3: without vs with integral action (pitch + Vd) =======================
 ax = new_report_fig(2, [2 1]);
-report_line(ax(1), ts(Base),  deg(Base.p),  C.teal,  'meas', 'LQR Baseline', S);
-report_line(ax(1), ts(IBase), deg(IBase.p), C.red,   'meas', 'IBaseline',    S);
-report_line(ax(1), ts(IHigh), deg(IHigh.p), C.ochre, 'meas', 'IHigh',        S);
-report_line(ax(1), ts(ILow),  deg(ILow.p),  C.light, 'meas', 'ILow',         S);
+report_line(ax(1), ts(Base),  deg(Base.p),  C.teal,  'meas', 'No integral', S);
+report_line(ax(1), ts(IBase), deg(IBase.p), C.red,   'meas', '$q_I = 1$', S);
+report_line(ax(1), ts(IHigh), deg(IHigh.p), C.ochre, 'meas', '$q_I = 10$', S);
+report_line(ax(1), ts(ILow),  deg(ILow.p),  C.light, 'meas', '$q_I = 0.1$', S);
 report_line(ax(1), [-2 0 0 25], deg([0 0 pc pc]), C.ref, 'ref', 'Reference $p_c$', S);
-report_line(ax(2), ts(Base),  Base.Vd,  C.teal,  'input', '', S);
-report_line(ax(2), ts(IBase), IBase.Vd, C.red,   'input', '', S);
-report_line(ax(2), ts(IHigh), IHigh.Vd, C.ochre, 'input', '', S);
-report_line(ax(2), ts(ILow),  ILow.Vd,  C.light, 'input', '', S);
+report_line(ax(2), ts(Base),  sm(Base.Vd),  C.teal,  'input', '', S);
+report_line(ax(2), ts(IBase), sm(IBase.Vd), C.red,   'input', '', S);
+report_line(ax(2), ts(IHigh), sm(IHigh.Vd), C.ochre, 'input', '', S);
+report_line(ax(2), ts(ILow),  sm(ILow.Vd),  C.light, 'input', '', S);
 finish_report_fig(ax, S, 'time since pitch step $t$ (s)', {'pitch $p$ (deg)', '$V_d$ (V)'}, ...
                   [-2 25], {[-1 23], []}, 'p2_integral');
 
@@ -138,7 +138,7 @@ report_line(ax(1), ts(INoF),  deg(INoF.p),  C.light, 'meas', '$F = 0$',  S);
 report_line(ax(1), tm, deg(pc*step(G_iF, tm)), C.red,   'model', 'Model, with $F$', S);
 report_line(ax(1), tm, deg(pc*step(G_i0, tm)), C.light, 'model', 'Model, $F = 0$',  S);
 report_line(ax(1), [-2 0 0 25], deg([0 0 pc pc]), C.ref, 'ref', 'Reference $p_c$', S);
-report_line(ax(2), ts(IBase), IBase.Vd, C.red,   'input', '', S);
-report_line(ax(2), ts(INoF),  INoF.Vd,  C.light, 'input', '', S);
+report_line(ax(2), ts(IBase), sm(IBase.Vd), C.red,   'input', '', S);
+report_line(ax(2), ts(INoF),  sm(INoF.Vd),  C.light, 'input', '', S);
 finish_report_fig(ax, S, 'time since pitch step $t$ (s)', {'pitch $p$ (deg)', '$V_d$ (V)'}, ...
                   [-2 25], {[-1 23], []}, 'p2_feedforward');
