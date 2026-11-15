@@ -64,15 +64,17 @@ Of the three runs, the baseline has the smallest estimation error in both $\hat{
 \end{figure}
 
 \paragraph{Disconnecting new data.}
-In \cref{fig:p4_newdata} the new-data signal was disconnected twice during flight (shaded areas).
-In both intervals the estimate $\hat{p}$ stays near $0^\circ$, while the encoder pitch moves away and reaches $36^\circ$ and $23^\circ$.
-At the same time the plotted diagonal elements of $\hat{P}$ grow, from about $10^{-4}$ up to between $10^{-2}$ and $10^{-1}$.
-When the signal is reconnected, $\hat{p}$ jumps to the encoder value, and $\hat{P}$ falls back to its previous level within about $0.05\,\mathrm{s}$.
+In \cref{fig:p4_newdata} the new-data signal was disconnected from $5.4$ to $12.5\,\mathrm{s}$ during flight (shaded area).
+During the cut the estimate $\hat{p}$ follows the reference, including the step at $8\,\mathrm{s}$, while the encoder pitch moves away and reaches about $-41^\circ$ just before the signal is reconnected.
+At the same time the plotted diagonal elements of $\hat{P}$ grow, from about $10^{-4}$ up to between about $0.04$ and $2$.
+When the signal is reconnected, $\hat{p}$ jumps to the encoder value, and $\hat{P}$ falls back to its previous level within about $0.07\,\mathrm{s}$.
+The helicopter is then brought back and follows the pitch step at $13\,\mathrm{s}$, but settles around $-11^\circ$ instead of $-17^\circ$.
+In a later run the signal was disconnected twice, and $\hat{P}$ grew and fell back in the same way (not shown).
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{figures/p4_newdata.pdf}
-    \caption{New-data signal disconnected twice during flight (shaded). Top: pitch reference, encoder and estimate. Bottom: selected diagonal elements of $\hat{P}$.}
+    \caption{New-data signal disconnected from $5.4$ to $12.5\,\mathrm{s}$ during flight (shaded). The controller uses the estimate as feedback. Top: pitch reference, encoder and estimate. Bottom: selected diagonal elements of $\hat{P}$.}
     \label{fig:p4_newdata}
 \end{figure}
 

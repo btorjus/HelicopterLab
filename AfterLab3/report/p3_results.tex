@@ -1,0 +1,49 @@
+% ===================== Part III - Results =====================
+% Figures from AfterLab3/p3_report_figs.m in figures/Lab3/. Observations only.
+% Same text as in the report (Part II style: no \paragraph headings, few numbers).
+
+\subsection{Results}
+
+\Cref{fig:p3_sine} shows the pitch during the sine part of the reference profile for slow, balanced and fast poles, with all states measured in the left column and only $e$ and $\dot{\lambda}$ in the right column.
+With all states and balanced or fast poles, the estimate lies on top of the encoder through the whole sine.
+With slow poles it follows the shape of the encoder pitch, but lies about $9^\circ$ below it.
+The very fast pole set gave the same result as the fast one (not shown).
+
+With only $e$ and $\dot{\lambda}$ measured, none of the estimates follow the encoder as closely.
+With slow poles (upper right panel) the estimate swings only about half as far as the encoder pitch, and the encoder pitch oscillates more and more towards the end of the sine.
+With balanced poles the estimate is noisy and lies above the encoder for most of the sine.
+With fast poles the estimate was far outside the axis and the helicopter never reached hover, so this run is not shown.
+With very fast poles the helicopter did not leave the ground.
+
+Over the whole profile (not shown), the pitch estimate with all states stays within a few degrees of the encoder for balanced, fast and very fast poles.
+With slow poles the error grows during the run and is about $20^\circ$ at the end, which is the offset seen in the upper left panel of \cref{fig:p3_sine}.
+The elevation estimate was not worse with only $e$ and $\dot{\lambda}$ measured than with all states, and is therefore not plotted.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/Lab3/p3_sine.pdf}
+    \caption{Pitch during the sine part of the reference profile for slow, balanced and fast observer poles. Left: all states measured. Right: only $e$ and $\dot{\lambda}$ measured.}
+    \label{fig:p3_sine}
+\end{figure}
+
+\Cref{fig:p3_vd} shows $V_d$ in hover just before the first pitch step, with the standard deviation of each run in the legend.
+With all states (left panel) all runs stay close to zero, and the faster pole sets give a slightly noisier $V_d$.
+With only $e$ and $\dot{\lambda}$ (right panel) the noise grows with faster poles: balanced is noisier than slow, and with fast poles $V_d$ swings outside the axis for the whole interval.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/Lab3/p3_vd.pdf}
+    \caption{Differential voltage $V_d$ in hover for different observer poles. Left: all states measured. Right: only $e$ and $\dot{\lambda}$ measured. Very fast poles with $e$ and $\dot{\lambda}$ are not shown, as the helicopter did not leave the ground.}
+    \label{fig:p3_vd}
+\end{figure}
+
+When the helicopter was moved by hand with the accelerometer angles as input to the Euler transformation, the pitch and elevation from the accelerometer were on average about $5^\circ$ from the encoder, with the largest deviations about $30^\circ$ in pitch and $40^\circ$ in elevation.
+% TODO (group): what was the difference with the encoder angles as Euler input?
+
+% Optional figure - include only if there is room (then replace "(not shown)" in the drift sentence with \cref{fig:p3_drift}):
+% \begin{figure}[htbp]
+%     \centering
+%     \includegraphics[width=\textwidth]{figures/Lab3/p3_drift.pdf}
+%     \caption{All states measured. Top: pitch with the slow and the balanced observer. Bottom: pitch estimation error for slow, balanced and fast poles.}
+%     \label{fig:p3_drift}
+% \end{figure}

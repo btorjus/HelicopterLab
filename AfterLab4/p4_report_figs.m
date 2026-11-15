@@ -4,10 +4,9 @@
 %
 %   Figure               Hypothesis / task               Runs
 %   p4_noise             Task 1 (Rd), ground vs hover    T4_noise_ground, T4_noise_hover
-%   p4_qd_zero           H1: Qd = 0                      T4_test2_Qd_zero (+ baseline P)
-%   p4_qd_inf            H2: Qd -> inf                   T4_test3_Qd_inf, T4_test1_Baseline
-%   p4_qd_split          H3: rates high vs angles high   T4_test4, T4_test5, T4_test1
-%   p4_newdata           Task 3: new-data switch         T4_test6b_NewDataTwice (run of 9 Nov, two cuts)
+%   p4_qd_limits         H1+H2: Qd = 0 and Qd -> inf     T4_test2_Qd_zero, T4_test3_Qd_inf (+ baseline P)
+%   p4_qd_split          H3: rates high vs angles high   T4_test4_RatesHigh, T4_test5_AnglesHigh
+%   p4_newdata           Task 3: new-data switch         T4_test6_NewDataSwitch (4 Nov, one cut 5.4-12.5 s)
 %   p4_vs_luenberger     Task 3: Kalman vs Luenberger    T4_test7 vs Part III T3_test3_cl
 %
 % NO smoothing anywhere. Estimation errors are taken against the raw encoder signals.
@@ -21,7 +20,7 @@ clear; clc; close all;
 addpath('utils');
 
 %% ======================= STYLE =======================
-S.palette  = 'A';            % 'A' = teal/gold + grey (chosen), 'B' = red/grey
+S.palette  = 'L1';           % 'L1' = AfterLab1 colours (rest of the report), 'A' = teal/gold + grey, 'B' = red/grey
 S.width    = 20;             % figure width [cm]
 S.font     = 13;             % font size
 S.lw       = 1.6;            % clean lines (encoder, flown pitch, covariance)
@@ -32,16 +31,17 @@ S.lw_err   = 0.8;            % estimation errors (p_hat - p, e_hat - e) and nois
 S.lw_cmp   = 1.2;            % clean comparison line drawn on top of a noisy one (Qd -> inf figure)
 S.lw_psd   = 1.0;            % noise spectrum
 S.axis_lw  = 0.6;            % axis line width
+S.grid     = false;          % AfterLab1 has no grid
 S.grid_col = [0.90 0.90 0.90];
 % Figure heights: height = ratio * width. Panel heights are relative (e.g. [3 2] = top 60 %).
 S.ratio.noise   = 0.36;   S.panels.noise   = [1 1 1.4];   % widths of: ground | hover | PSD
-S.ratio.qd_zero = 0.55;   S.panels.qd_zero = [3 2];
-S.ratio.qd_inf  = 0.55;   S.panels.qd_inf  = [1 1 1];
-S.ratio.split   = 0.55;   S.panels.split   = [1 1 1];
+S.ratio.qd_limits = 0.55; S.panels.qd_limits = [3 2];   % heights of: pitch row | P row
+S.ratio.split   = 0.60;   S.panels.split   = [1 1];     % heights of: pitch row | pitch-rate row
+S.win_qd        = [3 19];                               % time window of both Q_d figures
 S.ratio.newdata = 0.55;   S.panels.newdata = [3 2];
 S.ratio.luen    = 0.55;   S.panels.luen    = [1 1 1];
 S.outdir   = fullfile('figures', 'report');
-S.formats  = {'pdf', 'png'};
+S.formats  = {'pdf'};
 
 % Colours by ROLE, so every figure uses them the same way:
 %   enc   true signal (encoder)           est   Kalman estimate on top of enc
@@ -49,7 +49,14 @@ S.formats  = {'pdf', 'png'};
 %   base  comparison case (baseline, Luenberger, ground)
 %   main  the case the figure is about    third a third case
 %   shade new-data disconnected           ref   reference (dashed)
+C.ref = '#000000';                               % reference: black dashed (as in Part II)
+% Colours for diag(P), separate from encoder/estimate so no colour is used twice in a figure:
+C.P_pp = '#E1AF00';   C.P_pdpd = '#3E9B5F';   C.P_ll = '#7B4FA0';   % ochre | green (Part I) | purple (Part II)
 switch S.palette
+    case 'L1'                                    % AfterLab1 / Task_2.m (Zissou)
+        C.enc  = '#3B9AB2';   C.est  = '#F21A00';   C.raw   = '#D9D9D9';
+        C.base = '#3B9AB2';   C.main = '#F21A00';   C.third = '#E1AF00';
+        C.shade = '#FBEFC9';                        % reference: black dashed (C.ref above)
     case 'A'
         C.enc  = '#004f46';   C.est  = '#d6b43e';   C.raw   = '#d9d9d9';
         C.base = '#8c8c8c';   C.main = '#004f46';   C.third = '#d6b43e';
@@ -59,7 +66,6 @@ switch S.palette
         C.base = '#4d4d4d';   C.main = '#b2182b';   C.third = '#ef8a62';
         C.shade = '#fddbc7';
 end
-C.ref = '#000000';
 
 deg = @rad2deg;
 win = @(d, w) d.t >= w(1) & d.t <= w(2);
@@ -70,7 +76,8 @@ Base = load_run_p4('T4_test1_Baseline');   Q0   = load_run_p4('T4_test2_Qd_zero'
 Qinf = load_run_p4('T4_test3_Qd_inf');     RH   = load_run_p4('T4_test4_RatesHigh');
 AH   = load_run_p4('T4_test5_AnglesHigh'); KF   = load_run_p4('T4_test7_VsLuenberger');
 VL   = load_run_p4('T4_test8_VanLoan');
-SW   = load_run_p4('T4_test6b_NewDataTwice');   % two cuts; 'T4_test6_NewDataSwitch' has one long cut
+SW   = load_run_p4('T4_test6_NewDataSwitch');   % 4 Nov, test plan run with saved parameters
+%  (the 9 Nov run 'T4_test6b_NewDataTwice' is NOT used: the pitch reference did not reach the controller)
 LU   = load_p3_run('T3_test3_cl');              % Part III, all states, "balansert" poles
 
 %% ======================= NUMBERS FOR THE TEXT =======================
@@ -137,61 +144,81 @@ xlabel(ax(3), 'frequency (Hz)');   ylabel(ax(3), 'PSD (deg$^2$/Hz)');
 p4_legend(ax(3), 'northeast', 1, S);
 p4_finish(ax, S, 'p4_noise', S.ratio.noise, false);
 
-%% ======================= FIGURE 2: H1, Qd = 0 =======================
-% The controller flies on the estimate. With Qd = 0 the estimate stops following
-% the IMU, so the controller tracks its own estimate while the real pitch diverges.
-ax = p4_fig(2, 1, S.panels.qd_zero);
-plot(ax(1), Q0.t, deg(Q0.y(:,1)),    '-',  'Color', C.raw, 'LineWidth', S.lw_thin, 'DisplayName', 'IMU measurement');
-plot(ax(1), Q0.t, deg(Q0.enc(:,3)),  '-',  'Color', C.enc, 'LineWidth', S.lw,      'DisplayName', 'Encoder (true pitch)');
-plot(ax(1), Q0.t, deg(Q0.xhat(:,1)), '-',  'Color', C.est, 'LineWidth', S.lw_est,  'DisplayName', 'Estimate $\hat{p}$ (fed to controller)');
-plot(ax(1), Q0.t, deg(Q0.ref(:,1)),  '--', 'Color', C.ref, 'LineWidth', S.lw_ref,  'DisplayName', 'Reference $p_c$');
-plot(ax(2), Base.t, Base.Pdiag(:,1), '-', 'Color', C.base,  'LineWidth', S.lw, 'DisplayName', '$\hat{P}_{pp}$, baseline');
-plot(ax(2), Q0.t,   Q0.Pdiag(:,1),   '-', 'Color', C.main,  'LineWidth', S.lw, 'DisplayName', '$\hat{P}_{pp}$, $Q_d = 0$');
-plot(ax(2), Q0.t,   Q0.Pdiag(:,2),   '-', 'Color', C.third, 'LineWidth', S.lw, 'DisplayName', '$\hat{P}_{\dot{p}\dot{p}}$, $Q_d = 0$');
-set(ax(2), 'YScale', 'log', 'YTick', 10.^(-9:2:-1));
-ylim(ax(1), [-60 120]);   ylim(ax(2), [1e-9 1e-1]);   xlim(ax(2), [0 19]);
-ylabel(ax(1), 'pitch $p$ (deg)');   ylabel(ax(2), 'diag$(\hat{P})$');   xlabel(ax(2), 'time $t$ (s)');
-p4_legend(ax(1), 'northwest', 2, S);
-p4_legend(ax(2), 'northeast', 3, S);
-p4_finish(ax, S, 'p4_qd_zero', S.ratio.qd_zero, true);
-
-%% ======================= FIGURE 3: H2, Qd -> infinity =======================
-% Over the two pitch steps: the pitch flown is almost the same, but the estimate
-% equals the noisy IMU and the noise goes straight into Vd. Noisy run drawn first.
-ax = p4_fig(3, 1, S.panels.qd_inf);
-plot(ax(1), Base.t, deg(Base.enc(:,3)), '-',  'Color', C.base, 'LineWidth', S.lw,     'DisplayName', 'Baseline');
-plot(ax(1), Qinf.t, deg(Qinf.enc(:,3)), '-',  'Color', C.main, 'LineWidth', S.lw,     'DisplayName', '$Q_d \to \infty$');
-plot(ax(1), Base.t, deg(Base.ref(:,1)), '--', 'Color', C.ref,  'LineWidth', S.lw_ref, 'DisplayName', 'Reference $p_c$');
-plot(ax(2), Qinf.t, deg(Qinf.xhat(:,1)), '-', 'Color', C.main, 'LineWidth', S.lw_thin);
-plot(ax(2), Base.t, deg(Base.xhat(:,1)), '-', 'Color', C.base, 'LineWidth', S.lw_cmp);
-plot(ax(3), Qinf.t, Qinf.u(:,2), '-', 'Color', C.main, 'LineWidth', S.lw_thin);
-plot(ax(3), Base.t, Base.u(:,2), '-', 'Color', C.base, 'LineWidth', S.lw_cmp);
-ylim(ax(1), [-28 22]);   ylim(ax(2), [-50 25]);   xlim(ax(3), [7 21]);
-ylabel(ax(1), 'pitch $p$ (deg)');   ylabel(ax(2), 'estimate $\hat{p}$ (deg)');
-ylabel(ax(3), '$V_d$ (V)');         xlabel(ax(3), 'time $t$ (s)');
-p4_legend(ax(1), 'northeast', 3, S);
-p4_finish(ax, S, 'p4_qd_inf', S.ratio.qd_inf, true);
+%% ======================= FIGURE 2: H1 + H2, Qd = 0 and Qd -> infinity =======================
+% Same top row as the distribution figure: IMU (grey), reference, estimate and encoder.
+% Bottom left: diag(P) for Qd = 0 with the baseline. P for Qd -> inf is flat at R_d and
+% is only mentioned in the text; the empty slot bottom right holds the legend.
+% P is plotted at the samples with new data, i.e. right after a correction.
+w    = S.win_qd;
+hp   = S.panels.qd_limits;                                 % [pitch rows, P rows]
+runs = {Q0,   '$Q_d = 0$',        [-60 110], S.lw_est;     % last column: line width of the estimate
+        Qinf, '$Q_d \to \infty$', [-50 25],  S.lw_thin};
+figure('Color', 'w');
+tl = tiledlayout(sum(hp), 2, 'TileSpacing', 'compact', 'Padding', 'compact');
+ax = gobjects(1, 3);                                       % pitch Qd=0 | pitch Qd->inf | P Qd=0
+for c = 1:2
+    d = runs{c,1};
+    ax(c) = nexttile(tl, c, [hp(1) 1]);   hold(ax(c), 'on');
+    plot(ax(c), d.t, deg(d.y(:,1)),    '-',  'Color', C.raw, 'LineWidth', S.lw_thin,  'DisplayName', 'IMU measurement');
+    plot(ax(c), d.t, deg(d.ref(:,1)),  '--', 'Color', C.ref, 'LineWidth', S.lw_ref,   'DisplayName', 'Reference $p_c$');
+    plot(ax(c), d.t, deg(d.xhat(:,1)), '-',  'Color', C.est, 'LineWidth', runs{c,4},  'DisplayName', 'Estimate $\hat{p}$');
+    plot(ax(c), d.t, deg(d.enc(:,3)),  '-',  'Color', C.enc, 'LineWidth', S.lw,       'DisplayName', 'Encoder $p$');
+    title(ax(c), runs{c,2});   ylim(ax(c), runs{c,3});   xlim(ax(c), w);
+end
+ylabel(ax(1), 'pitch $p$ (deg)');   xlabel(ax(2), 'time $t$ (s)');
+ax(3) = nexttile(tl, 2*hp(1) + 1, [hp(2) 1]);   hold(ax(3), 'on');
+nb = Base.new(:) > 0.5;   nn = Q0.new(:) > 0.5;          % samples with new data
+h  = [plot(ax(3), Base.t(nb), Base.Pdiag(nb,1), '--', 'Color', C.P_pp,   'LineWidth', S.lw), ...   % baseline: dashed
+      plot(ax(3), Q0.t(nn),   Q0.Pdiag(nn,1),   '-',  'Color', C.P_pp,   'LineWidth', S.lw), ...
+      plot(ax(3), Q0.t(nn),   Q0.Pdiag(nn,2),   '-',  'Color', C.P_pdpd, 'LineWidth', S.lw)];
+set(h, 'HandleVisibility', 'off');
+set(ax(3), 'YScale', 'log', 'YTick', 10.^(-10:2:-2));
+ylim(ax(3), [1e-10 1e-2]);   xlim(ax(3), w);
+ylabel(ax(3), 'diag$(\hat{P})$');   xlabel(ax(3), 'time $t$ (s)');
+% Legend in the empty slot bottom right: P entries added as invisible (NaN) lines in ax(1)
+plot(ax(1), NaN, NaN, '--', 'Color', C.P_pp,   'LineWidth', S.lw, 'DisplayName', '$\hat{P}_{pp}$, baseline');
+plot(ax(1), NaN, NaN, '-',  'Color', C.P_pp,   'LineWidth', S.lw, 'DisplayName', '$\hat{P}_{pp}$, $Q_d = 0$');
+plot(ax(1), NaN, NaN, '-',  'Color', C.P_pdpd, 'LineWidth', S.lw, 'DisplayName', '$\hat{P}_{\dot{p}\dot{p}}$, $Q_d = 0$');
+lg = legend(ax(1), 'show');   set(lg, 'Box', 'off', 'NumColumns', 2);
+lg.Layout.Tile = 2*hp(1) + 2;   lg.Layout.TileSpan = [hp(2) 1];
+drawnow
+ax(1).XTick = ax(3).XTick;   ax(1).XTickLabel = [];      % time numbers only under the P panel
+p4_finish(ax, S, 'p4_qd_limits', S.ratio.qd_limits, false);
 
 %% ======================= FIGURE 4: H3, high q on rates vs on angles =======================
-% Top: the pitch that was actually flown. Below: estimate minus raw encoder.
-ax = p4_fig(3, 1, S.panels.split);
-plot(ax(1), Base.t, deg(Base.enc(:,3)), '-',  'Color', C.base,  'LineWidth', S.lw,     'DisplayName', 'Baseline');
-plot(ax(1), RH.t,   deg(RH.enc(:,3)),   '-',  'Color', C.main,  'LineWidth', S.lw,     'DisplayName', 'Rates high');
-plot(ax(1), AH.t,   deg(AH.enc(:,3)),   '-',  'Color', C.third, 'LineWidth', S.lw,     'DisplayName', 'Angles high');
-plot(ax(1), Base.t, deg(Base.ref(:,1)), '--', 'Color', C.ref,   'LineWidth', S.lw_ref, 'DisplayName', 'Reference $p_c$');
-plot(ax(2), AH.t,   deg(AH.xhat(:,1)   - AH.enc(:,3)),   '-', 'Color', C.third, 'LineWidth', S.lw_thin);
-plot(ax(2), RH.t,   deg(RH.xhat(:,1)   - RH.enc(:,3)),   '-', 'Color', C.main,  'LineWidth', S.lw_err);
-plot(ax(2), Base.t, deg(Base.xhat(:,1) - Base.enc(:,3)), '-', 'Color', C.base,  'LineWidth', S.lw_err);
-plot(ax(3), RH.t,   deg(RH.xhat(:,2)   - RH.enc(:,4)),   '-', 'Color', C.main,  'LineWidth', S.lw_thin);
-plot(ax(3), AH.t,   deg(AH.xhat(:,2)   - AH.enc(:,4)),   '-', 'Color', C.third, 'LineWidth', S.lw_thin);
-plot(ax(3), Base.t, deg(Base.xhat(:,2) - Base.enc(:,4)), '-', 'Color', C.base,  'LineWidth', S.lw_thin);
-ylim(ax(1), [-35 32]);   ylim(ax(2), [-16 16]);   ylim(ax(3), [-32 40]);   xlim(ax(3), [7 21]);
-ylabel(ax(1), 'pitch $p$ (deg)');
-ylabel(ax(2), '$\hat{p} - p$ (deg)');
-ylabel(ax(3), '$\hat{\dot{p}} - \dot{p}$ (deg/s)');
-xlabel(ax(3), 'time $t$ (s)');
-p4_legend(ax(1), 'north', 4, S);
-p4_finish(ax, S, 'p4_qd_split', S.ratio.split, true);
+% Same top row as the limits figure. Bottom: the pitch rate, since H3 is about angles vs rates.
+% Left: high q on the rates. Right: high q on the angles. Same axes in both columns.
+w    = S.win_qd;
+hs   = S.panels.split;                                     % [pitch rows, rate rows]
+runs = {RH, 'Rates high'; AH, 'Angles high'};
+figure('Color', 'w');
+tl = tiledlayout(sum(hs), 2, 'TileSpacing', 'compact', 'Padding', 'compact');
+ax = gobjects(2, 2);                                       % ax(row, column)
+for c = 1:2
+    d = runs{c,1};
+    ax(1,c) = nexttile(tl, c, [hs(1) 1]);             hold(ax(1,c), 'on');
+    ax(2,c) = nexttile(tl, 2*hs(1) + c, [hs(2) 1]);   hold(ax(2,c), 'on');
+    plot(ax(1,c), d.t, deg(d.y(:,1)),    '-',  'Color', C.raw, 'LineWidth', S.lw_thin, 'DisplayName', 'IMU measurement');
+    plot(ax(1,c), d.t, deg(d.ref(:,1)),  '--', 'Color', C.ref, 'LineWidth', S.lw_ref,  'DisplayName', 'Reference $p_c$');
+    plot(ax(1,c), d.t, deg(d.xhat(:,1)), '-',  'Color', C.est, 'LineWidth', S.lw_err,  'DisplayName', 'Estimate');
+    plot(ax(1,c), d.t, deg(d.enc(:,3)),  '-',  'Color', C.enc, 'LineWidth', S.lw,      'DisplayName', 'Encoder');
+    h = [plot(ax(2,c), d.t, deg(d.y(:,2)),    '-', 'Color', C.raw, 'LineWidth', S.lw_thin), ...
+         plot(ax(2,c), d.t, deg(d.xhat(:,2)), '-', 'Color', C.est, 'LineWidth', S.lw_err), ...
+         plot(ax(2,c), d.t, deg(d.enc(:,4)),  '-', 'Color', C.enc, 'LineWidth', S.lw_err)];
+    set(h, 'HandleVisibility', 'off');
+    title(ax(1,c), runs{c,2});
+    ylim(ax(1,c), [-35 25]);   ylim(ax(2,c), [-80 80]);
+    xlim(ax(1,c), w);          xlim(ax(2,c), w);
+    xlabel(ax(2,c), 'time $t$ (s)');
+end
+ylabel(ax(1,1), 'pitch $p$ (deg)');   ylabel(ax(2,1), 'pitch rate $\dot{p}$ (deg/s)');
+lg = legend(ax(1,1), 'show');   set(lg, 'Box', 'off', 'NumColumns', 4);   lg.Layout.Tile = 'south';
+drawnow
+for c = 1:2                                                % time numbers only on the bottom row
+    ax(1,c).XTick = ax(2,c).XTick;   ax(1,c).XTickLabel = [];
+end
+ax(1,2).YTickLabel = [];   ax(2,2).YTickLabel = [];       % same y-axes in both columns
+p4_finish(ax(:)', S, 'p4_qd_split', S.ratio.split, false);
 
 %% ======================= FIGURE 5: new-data switch =======================
 % The cuts are found from the logged new-data signal: every stretch longer than
@@ -204,7 +231,7 @@ keep  = (i1 - i0) > 50;
 t_cut = [SW.t(i0(keep)), SW.t(i1(keep))];    % one row per cut: [start stop]
 fprintf('\nNew-data disconnected:\n');   fprintf('  %.2f s to %.2f s\n', t_cut');
 
-yl_p = [-22 58];   yl_P = [5e-5 5];
+yl_p = [-48 18];   yl_P = [5e-5 5];
 ax = p4_fig(2, 1, S.panels.newdata);
 for k = 1:size(t_cut, 1)
     hp = patch('Parent', ax(1), 'XData', t_cut(k, [1 2 2 1]), 'YData', yl_p([1 1 2 2]), ...
@@ -216,14 +243,13 @@ plot(ax(1), SW.t, deg(SW.ref(:,1)),  '--', 'Color', C.ref, 'LineWidth', S.lw_ref
 plot(ax(1), SW.t, deg(SW.enc(:,3)),  '-',  'Color', C.enc, 'LineWidth', S.lw,     'DisplayName', 'Encoder');
 plot(ax(1), SW.t, deg(SW.xhat(:,1)), '-',  'Color', C.est, 'LineWidth', S.lw_est, 'DisplayName', 'Estimate $\hat{p}$');
 set(hp, 'HandleVisibility', 'on', 'DisplayName', 'New-data disconnected');
-plot(ax(2), SW.t, SW.Pdiag(:,1), '-', 'Color', C.base,  'LineWidth', S.lw, 'DisplayName', '$\hat{P}_{pp}$');
-plot(ax(2), SW.t, SW.Pdiag(:,2), '-', 'Color', C.main,  'LineWidth', S.lw, 'DisplayName', '$\hat{P}_{\dot{p}\dot{p}}$');
-plot(ax(2), SW.t, SW.Pdiag(:,6), '-', 'Color', C.third, 'LineWidth', S.lw, 'DisplayName', '$\hat{P}_{\dot{\lambda}\dot{\lambda}}$');
+plot(ax(2), SW.t, SW.Pdiag(:,1), '-', 'Color', C.P_pp,   'LineWidth', S.lw, 'DisplayName', '$\hat{P}_{pp}$');
+plot(ax(2), SW.t, SW.Pdiag(:,2), '-', 'Color', C.P_pdpd, 'LineWidth', S.lw, 'DisplayName', '$\hat{P}_{\dot{p}\dot{p}}$');
+plot(ax(2), SW.t, SW.Pdiag(:,6), '-', 'Color', C.P_ll,   'LineWidth', S.lw, 'DisplayName', '$\hat{P}_{\dot{\lambda}\dot{\lambda}}$');
 set(ax(2), 'YScale', 'log', 'YTick', 10.^(-4:0));
-ylim(ax(1), yl_p);   ylim(ax(2), yl_P);   xlim(ax(2), [0.5 16]);
+ylim(ax(1), yl_p);   ylim(ax(2), yl_P);   xlim(ax(2), [3 18]);
 ylabel(ax(1), 'pitch $p$ (deg)');   ylabel(ax(2), 'diag$(\hat{P})$');   xlabel(ax(2), 'time $t$ (s)');
-p4_legend(ax(1), 'northeast', 2, S);
-p4_legend(ax(2), 'northeast', 3, S);
+p4_legend_east(ax, S);
 p4_finish(ax, S, 'p4_newdata', S.ratio.newdata, true);
 
 %% ======================= FIGURE 6: Kalman vs Luenberger, full 45 s profile =======================
@@ -242,7 +268,7 @@ ylabel(ax(1), 'pitch $p$ (deg)');
 ylabel(ax(2), '$\hat{p} - p$ (deg)');
 ylabel(ax(3), '$\hat{e} - e$ (deg)');
 xlabel(ax(3), 'time $t$ (s)');
-p4_legend(ax(1), 'north', 3, S);
+p4_legend_east(ax, S);
 p4_finish(ax, S, 'p4_vs_luenberger', S.ratio.luen, true);
 
 %% ======================= LOCAL FUNCTIONS =======================
@@ -269,19 +295,39 @@ function p4_legend(ax, loc, ncol, S)
     set(lg, 'Location', loc, 'NumColumns', ncol, 'Box', 'off');
 end
 
+function p4_legend_east(ax, S)
+% One shared legend to the right of the stacked panels, outside the plot area.
+% Entries from the lower panels are copied into the top panel as invisible (NaN) lines,
+% so all entries end up in one legend. Needs MATLAB R2020b or newer (Layout.Tile).
+    for k = 2:numel(ax)
+        h = flipud(findobj(ax(k), 'Type', 'line', 'HandleVisibility', 'on'));
+        for j = 1:numel(h)
+            if isempty(h(j).DisplayName), continue; end
+            plot(ax(1), NaN, NaN, h(j).LineStyle, 'Color', h(j).Color, ...
+                 'LineWidth', h(j).LineWidth, 'DisplayName', h(j).DisplayName);
+            h(j).HandleVisibility = 'off';
+        end
+    end
+    lg = legend(ax(1), 'show');
+    set(lg, 'Box', 'off', 'NumColumns', 1);
+    lg.Layout.Tile = 'east';
+end
+
 function p4_finish(ax, S, fname, ratio, share_x)
 % Common look + export. share_x = true: stacked panels share the x-axis,
 % tick numbers only on the bottom panel.
     hfig = ancestor(ax(1), 'figure');
     set(hfig, 'Units', 'centimeters', 'Position', [3 3 S.width ratio*S.width]);
     set(ax, 'Box', 'off', 'TickDir', 'in', 'LineWidth', S.axis_lw, 'Layer', 'top', ...
-            'XGrid', 'on', 'YGrid', 'on', 'GridColor', S.grid_col, 'GridAlpha', 1, ...
+            'XGrid', onoff(S.grid), 'YGrid', onoff(S.grid), 'GridColor', S.grid_col, 'GridAlpha', 1, ...
             'XMinorGrid', 'off', 'YMinorGrid', 'off', 'MinorGridLineStyle', 'none');
     set(findall(hfig, '-property', 'FontSize'), 'FontSize', S.font);
     set(findall(hfig, '-property', 'Interpreter'), 'Interpreter', 'latex');
     set(findall(hfig, '-property', 'TickLabelInterpreter'), 'TickLabelInterpreter', 'latex');
     if share_x && numel(ax) > 1
-        linkaxes(ax, 'x');
+        xl = xlim(ax(end));            % time window set on the bottom panel
+        linkaxes(ax, 'x');             % (linkaxes would otherwise take the limits of the top panel)
+        xlim(ax(end), xl);
         drawnow
         for k = 1:numel(ax) - 1
             ax(k).XTick      = ax(end).XTick;
@@ -329,4 +375,9 @@ function d = load_p3_run(tag)
     d.ref  = D(:,25:26);
     d.u    = D(:,27:28);
     d.enc(:,5) = d.enc(:,5) - heli_e_offset();   % same elevation offset as load_run_p4
+end
+
+function s = onoff(tf)
+% true/false -> 'on'/'off' for graphics properties.
+    if tf, s = 'on'; else, s = 'off'; end
 end
