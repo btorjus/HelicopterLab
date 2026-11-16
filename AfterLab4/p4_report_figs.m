@@ -38,8 +38,8 @@ S.ratio.noise   = 0.36;   S.panels.noise   = [1 1 1.4];   % widths of: ground | 
 S.ratio.qd_limits = 0.55; S.panels.qd_limits = [3 2];   % heights of: pitch row | P row
 S.ratio.split   = 0.60;   S.panels.split   = [1 1];     % heights of: pitch row | pitch-rate row
 S.win_qd        = [3 19];                               % time window of both Q_d figures
-S.ratio.newdata = 0.55;   S.panels.newdata = [3 2];
-S.ratio.luen    = 0.55;   S.panels.luen    = [1 1 1];
+S.ratio.newdata = 0.45;   S.panels.newdata = [3 2];
+S.ratio.luen    = 0.47;   S.panels.luen    = [1 1 1];
 S.outdir   = fullfile('figures', 'report');
 S.formats  = {'pdf'};
 
